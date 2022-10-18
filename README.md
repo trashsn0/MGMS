@@ -9,7 +9,7 @@ go to -> http://45.79.116.183/
 - Bogdan B / 40156779
 - Christopher R / 40181481
 - Peter R / 40123208
--
+- Chandler H / 40156534
 ## How to commit code and changes
  - Make github account and send your username to the discord
 
