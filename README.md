@@ -13,3 +13,6 @@ go to -> http://45.79.116.183/
 ## How to commit code and changes
  - Make github account
  - Finish this list
+
+## How does the git/server setup works
+ - blabla
