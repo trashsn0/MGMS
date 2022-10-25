@@ -1,5 +1,9 @@
 <?php
+spl_autoload_register(function ($class) {
+    include "../model/{$class}Class.php";
+});
 
+$db = new DBManager();
 session_start();
 
 if (isset($_POST['Register'])) {
@@ -34,15 +38,16 @@ if (isset($_POST['Register'])) {
         return;
     }
 
+    $array['id'] = 0;
+    $array['accessLevel'] = 0;
+    $array['username'] = $_POST['username'];
+    $array['password'] = $_POST['password'];
+    $array['firstName'] = $_POST['firstName'];
+    $array['lastName'] = $_POST['lastName'];
 
-    echo "<p>Username: " . $_POST['username'] . "</p><br>";
-    echo "<p>Password: " . $_POST['password'] . "</p><br>";
-    echo "<p>Confirm Password: " . password_hash($_POST['confirmPassword'], PASSWORD_DEFAULT) . "</p><br>";
-    echo "<p>First Name: " . $_POST['firstName'] . "</p><br>";
-    echo "<p>Last Name: " . $_POST['lastName'] . "</p><br>";
+    $user = new user($array);
 
-    echo "<a href='../view/registerUserView.php'>Back</a>";
+    $query = $db->registerUser($user);
 
-
-    // ADD USER TO DB AFTER HERE
+    header("Location: ../View/registerUserView.php?Success");
 }

@@ -47,6 +47,13 @@
                     <h1 class=""><?php echo $_SESSION['Error']; ?></h1>
                 </div>
             <?php endif; ?>
+            <?php if (isset($_GET['Success'])) : ?>
+                <div class="alert alert-success fade in alert-dismissible show" style="margin-top:18px;">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true" style="font-size:20px">×</span>
+                    </button><strong>Success!</strong> User Has Been Created
+                </div>
+            <?php endif; ?>
             <form action="../controller/registerUserController.php" method="post">
 
                 <label for="username">Username:</label><br>
