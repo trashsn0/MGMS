@@ -37,7 +37,7 @@ if (isset($_POST['Register'])) {
 
     echo "<p>Username: " . $_POST['username'] . "</p><br>";
     echo "<p>Password: " . $_POST['password'] . "</p><br>";
-    echo "<p>Confirm Password: " . $_POST['confirmPassword'] . "</p><br>";
+    echo "<p>Confirm Password: " . password_hash($_POST['confirmPassword'], PASSWORD_DEFAULT) . "</p><br>";
     echo "<p>First Name: " . $_POST['firstName'] . "</p><br>";
     echo "<p>Last Name: " . $_POST['lastName'] . "</p><br>";
 

@@ -8,7 +8,10 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-    <title>Register</title>
+    <title>MGMS - Grade Management System </title>
+    <link rel="icon" type="image/x-icon" href="../assets/favicon.ico" />
+    <!-- Core theme CSS (includes Bootstrap)-->
+    <link href="../css/styles.css" rel="stylesheet" />
 </head>
 
 <body>
@@ -45,7 +48,7 @@
                 </div>
             <?php endif; ?>
             <form action="../controller/registerUserController.php" method="post">
-                <!-- PUT REGISTER CONTROLLER HERE -->
+
                 <label for="username">Username:</label><br>
                 <input type="text" id="username" name="username"><br>
 
@@ -64,7 +67,7 @@
                 <input type="submit" name="Register" value="Submit">
             </form>
             <hr>
-            <a href="loginView.php">Login</a> <!-- PUT REGISTER PAGE IN HREF HERE -->
+            <a href="loginView.php">Login</a>
         </div>
 
     </div>
