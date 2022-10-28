@@ -49,5 +49,9 @@ if (isset($_POST['Register'])) {
 
     $query = $db->registerUser($user);
 
-    header("Location: ../View/registerUserView.php?Success");
+    if ($query == true) {
+        header("Location: ../View/registerUserView.php?success");
+    } elseif ($query == false) {
+        header("Location: ../View/registerUserView.php?error");
+    }
 }

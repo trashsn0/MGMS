@@ -16,18 +16,25 @@
 </head>
 
 <body>
-    <div class="jumbotron vertical-center">
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" id="mainNav">
+        <div class="container px-4">
+            <a class="navbar-brand" href="../index.html">MGMS</a>
+        </div>
+    </nav>
+
+    <div class="vertical-center">
         <div class="container" style="text-align: center;">
             <h1>Register Form</h1>
             <br>
-            <?php if (isset($_SESSION['Error'])) : ?>
+            <?php if (isset($_GET['error'])) : ?>
                 <div class="alert alert-danger fade in alert-dismissible show">
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                         <span aria-hidden="true" style="font-size:20px">×</span>
-                    </button><strong>Error! </strong> <?php echo $_SESSION['Error']; ?>
+                    </button><strong>Error!</strong> Username not availabe!
                 </div>
             <?php endif; ?>
-            <?php if (isset($_GET['Success'])) : ?>
+            <?php if (isset($_GET['success'])) : ?>
                 <div class="alert alert-success fade in alert-dismissible show" style="margin-top:18px;">
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                         <span aria-hidden="true" style="font-size:20px">×</span>
@@ -71,10 +78,10 @@
                     </div>
                 </div>
 
-                <input class="btn-lg btn-primary" type="submit" name="Register" value="Submit">
+                <input class="btn btn-block btn-primary" style="width: 20%;" type="submit" name="Register" value="Submit">
             </form>
             <hr>
-            <a class="btn-lg btn-secondary" href="loginView.php">Login</a>
+            <a class="btn btn-block btn-secondary" style="width: 20%;" href="loginView.php">Login</a>
         </div>
 
     </div>

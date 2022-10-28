@@ -23,7 +23,7 @@ class DBManager
         }
     }
 
-    // Login
+    // Login User
     public function Login($username, $password)
     {
         $query     = $this->db->prepare("SELECT * FROM user where username = ?");
@@ -34,20 +34,31 @@ class DBManager
         }
     }
 
-    //Register
+    // Register User
     function registerUser(user $user)
     {
-        $query = $this->db->prepare("INSERT INTO user VALUES(DEFAULT, DEFAULT, ?, ?, ?, ?)");
-        $query->execute(array(
-            $user->getUsername(),
-            password_hash($user->getPassword(), PASSWORD_DEFAULT),
-            $user->getFirstName(),
-            $user->getLastName(),
-        ));
+        // Check if username already exists
+        $checkUsernameQuery = "SELECT * FROM user WHERE username = :user;";
+        $stmt = $this->db->prepare($checkUsernameQuery);
+        $stmt->execute(array(':user' => $user->getUsername()));
+        $result = !!$stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (!$result) { // Create User
+            $query = $this->db->prepare("INSERT INTO user VALUES(DEFAULT, DEFAULT, ?, ?, ?, ?)");
+            $query->execute(array(
+                $user->getUsername(),
+                password_hash($user->getPassword(), PASSWORD_DEFAULT),
+                $user->getFirstName(),
+                $user->getLastName(),
+            ));
+            return true;
+        } else { // Username already exists
+            return false;
+        }
     }
 
-    //Get User By ID
-    function getCustomer($id)
+    // Get User By ID
+    function getUser($id)
     {
         $query = $this->db->prepare("SELECT * FROM `user` WHERE id = ?");
         $query->execute(array($id));
@@ -55,5 +66,14 @@ class DBManager
         $user = new user($data);
 
         return $user;
+    }
+
+    // Wildcard search query
+    function searchUser($keyword)
+    {
+        $query = $this->db->prepare("SELECT * FROM `user` WHERE id LIKE ? OR username LIKE ? OR firstName LIKE ? OR lastName LIKE ?");
+        $query->execute(array(/*"%" . */$keyword/* . "%"*/, "%" . $keyword . "%", "%" . $keyword . "%"));
+        $results = $query->fetchAll(PDO::FETCH_ASSOC);
+        return $results;
     }
 }

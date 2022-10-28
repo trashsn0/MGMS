@@ -17,7 +17,13 @@
 
 <body>
 
-    <div class="class= jumbotron vertical-center">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" id="mainNav">
+        <div class="container px-4">
+            <a class="navbar-brand" href="../index.html">MGMS</a>
+        </div>
+    </nav>
+
+    <div class=" vertical-center">
 
         <div class="container" style="text-align: center;">
             <h1>Login Form</h1>
@@ -28,7 +34,6 @@
                         <span aria-hidden="true" style="font-size:20px">×</span>
                     </button><strong>Error!</strong> Invalid Credentials
                 </div>
-
             <?php endif; ?>
             <form action="../controller/loginController.php" method="post">
 
@@ -46,10 +51,10 @@
                     </div>
                 </div>
 
-                <input type="submit" name="Login" value="Submit" class="btn-lg btn-primary">
+                <input class="btn btn-block btn-primary" style="width: 20%;" type="submit" name="Login" value="Submit">
             </form>
             <hr>
-            <a class="btn-lg btn-secondary" href="registerUserView.php">Register</a>
+            <a class="btn btn-block btn-secondary" style="width: 20%;" href="registerUserView.php">Register</a>
         </div>
 
     </div>
