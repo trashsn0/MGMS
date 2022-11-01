@@ -8,19 +8,15 @@ class user
     private $password;
     private $firstName;
     private $lastName;
-    private $activeCourses;
-    private $innactiveCourses;
 
     function __construct($array)
     {
         $this->id = $array['id'];
-        $this->id = $array['accessLevel'];
+        $this->accessLevel = $array['accessLevel'];
         $this->username = $array['username'];
         $this->password = $array['password'];
         $this->firstName = $array['firstName'];
         $this->lastName = $array['lastName'];
-        $this->activeCourses = $array['activeCourses'];
-        $this->innactiveCourses = $array['innactiveCourses'];
     }
 
     public function toArray()
@@ -32,8 +28,6 @@ class user
         $array['password'] = $this->password;
         $array['firstName'] = $this->firstName;
         $array['lastName'] = $this->lastName;
-        $array['activeCourses'] = $this->activeCourses;
-        $array['innactiveCourses'] = $this->innactiveCourses;
         return $array;
     }
 
@@ -45,8 +39,6 @@ class user
         $desc .= "password: " . $this->password . "<br>";
         $desc .= "firstName: " . $this->firstName . "<br>";
         $desc .= "lastName: " . $this->lastName . "<br>";
-        $desc .= "activeCourses: " . $this->activeCourses . "<br>";
-        $desc .= "innactiveCourses: " . $this->innactiveCourses . "<br>";
         return $desc;
     }
 
@@ -166,46 +158,6 @@ class user
     public function setLastName($lastName)
     {
         $this->lastName = $lastName;
-
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getActiveCourses()
-    {
-        return $this->activeCourses;
-    }
-
-    /**
-     * @param mixed $activeCourses
-     *
-     * @return self
-     */
-    public function setActiveCourses($activeCourses)
-    {
-        $this->activeCourses = $activeCourses;
-
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getInnactiveCourses()
-    {
-        return $this->innactiveCourses;
-    }
-
-    /**
-     * @param mixed $innactiveCourses
-     *
-     * @return self
-     */
-    public function setInnactiveCourses($innactiveCourses)
-    {
-        $this->innactiveCourses = $innactiveCourses;
 
         return $this;
     }
