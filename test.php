@@ -1,3 +1,39 @@
+<!-- JUST TO QUICKLY CREATE DB ENTRIES AND TEST SQL QUERIES -->
+<!-- DELETE BEFORE DEPLOYMENT -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quick Create Stuff</title>
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link href="css/styles.css" rel="stylesheet" />
+    <script defer src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/popper.js@1.14.3/dist/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
+</head>
+
+<body>
+    <h1>Create Teacher</h1>
+    <form method="POST" action="test.php">
+        <input type="text" name="teacherUsername">
+        <input type="text" name="teacherPassword">
+        <input type="submit" name="createTeacher" id="createTeacher">
+    </form>
+    <br>
+    <hr><br>
+
+    <a href="view/loginView.php" type="button" class="btn btn-primary">LogIn/Register </a>
+
+</body>
+
+</html>
+
 <?php
 spl_autoload_register(function ($class) {
     include "model/{$class}Class.php";
@@ -6,30 +42,18 @@ spl_autoload_register(function ($class) {
 $db = new DBManager();
 session_start();
 
-$array['id'] = 0;
-$array['accessLevel'] = 0;
-$array['username'] = 'taest';
-$array['password'] = 'test';
-$array['firstName'] = 'test';
-$array['lastName'] = 'test';
+if (isset($_POST['createTeacher'])) {
+    $array['id'] = 0;
+    $array['accessLevel'] = 1;
+    $array['username'] = $_POST['teacherUsername'];
+    $array['password'] = $_POST['teacherPassword'];
+    $array['firstName'] = $_POST['teacherUsername'];
+    $array['lastName'] = $_POST['teacherUsername'];
 
-$user = new user($array);
+    $user = new user($array);
 
-$exists = $db->registerUser($user);
+    $exists = $db->registerUser($user);
 
-var_dump($exists);
-
-
-if ($exists) {
-    // user exists already.
-} else {
-    // user doesn't exist already, you can savely insert him.
+    var_dump($exists);
 }
-
-// var_dump($query);
-
-// if ($query == true) {
-//     header("Location: ../View/registerUserView.php?success");
-// } elseif ($query == false) {
-//     header("Location: ../View/registerUserView.php?error");
-// }
+?>
