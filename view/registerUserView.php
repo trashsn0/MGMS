@@ -27,11 +27,11 @@
         <div class="container" style="text-align: center;">
             <h1>Register Form</h1>
             <br>
-            <?php if (isset($_GET['error'])) : ?>
+            <?php if (isset($_SESSION['Error'])) : ?>
                 <div class="alert alert-danger fade in alert-dismissible show">
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                         <span aria-hidden="true" style="font-size:20px">×</span>
-                    </button><strong>Error!</strong> Username not availabe!
+                    </button><strong>Error! </strong> <?php echo $_SESSION['Error']; ?>
                 </div>
             <?php endif; ?>
             <?php if (isset($_GET['success'])) : ?>
@@ -46,35 +46,35 @@
                 <div class="form-group row">
                     <label for="username" class="col-sm-2 col-form-label">Username: </label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control-plaintext border border-dark" id="username" name="username">
+                        <input type="text" class="form-control-plaintext border border-dark" id="username" name="username" value=<?php echo (isset($_SESSION['username'])) ? $_SESSION['username'] : '' ?>>
                     </div>
                 </div>
 
                 <div class="form-group row">
                     <label for="password" class="col-sm-2 col-form-label">Passsword: </label>
                     <div class="col-sm-10">
-                        <input type="password" class="form-control-plaintext border border-dark" id="password" name="password">
+                        <input type="password" class="form-control-plaintext border border-dark" id="password" name="password" value=<?php echo (isset($_SESSION['password'])) ? $_SESSION['password'] : '' ?>>
                     </div>
                 </div>
 
                 <div class="form-group row">
                     <label for="confirmPassword" class="col-sm-2 col-form-label">Confirm Passsword: </label>
                     <div class="col-sm-10">
-                        <input type="password" class="form-control-plaintext border border-dark" id="confirmPassword" name="confirmPassword">
+                        <input type="password" class="form-control-plaintext border border-dark" id="confirmPassword" name="confirmPassword" value=<?php echo (isset($_SESSION['confirmPassword'])) ? $_SESSION['confirmPassword'] : '' ?>>
                     </div>
                 </div>
 
                 <div class="form-group row">
                     <label for="firstName" class="col-sm-2 col-form-label">Frist Name: </label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control-plaintext border border-dark" id="firstName" name="firstName">
+                        <input type="text" class="form-control-plaintext border border-dark" id="firstName" name="firstName" value=<?php echo (isset($_SESSION['firstName'])) ? $_SESSION['firstName'] : '' ?>>
                     </div>
                 </div>
 
                 <div class="form-group row">
                     <label for="firstName" class="col-sm-2 col-form-label">Last Name: </label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control-plaintext border border-dark" id="lastName" name="lastName">
+                        <input type="text" class="form-control-plaintext border border-dark" id="lastName" name="lastName" value=<?php echo (isset($_SESSION['lastName'])) ? $_SESSION['lastName'] : '' ?>>
                     </div>
                 </div>
 
@@ -86,7 +86,10 @@
 
     </div>
 
-    <?php unset($_SESSION['Error']); ?>
+    <?php
+    session_destroy();
+    unset($_SESSION['Error']);
+    ?>
 
 </body>
 

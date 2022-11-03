@@ -6,6 +6,10 @@ spl_autoload_register(function ($class) {
 $db = new DBManager();
 session_start();
 
+// Access Level
+// 0 == Student 
+// 1 == Teacher	
+
 if (isset($_POST['Login'])) {
 
     if (!empty($_POST['username'])  && !empty($_POST['password'])) {

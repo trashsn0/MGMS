@@ -52,6 +52,12 @@ if (isset($_POST['Register'])) {
     if ($query == true) {
         header("Location: ../View/registerUserView.php?success");
     } elseif ($query == false) {
-        header("Location: ../View/registerUserView.php?error");
+        $_SESSION['Error'] = 'Username not available!';
+        $_SESSION['username'] = $_POST['username'];
+        $_SESSION['password'] = $_POST['password'];
+        $_SESSION['confirmPassword'] = $_POST['confirmPassword'];
+        $_SESSION['firstName'] = $_POST['firstName'];
+        $_SESSION['lastName'] = $_POST['lastName'];
+        header("Location: ../view/registerUserView.php");
     }
 }

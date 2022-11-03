@@ -26,7 +26,7 @@ class DBManager
     // Login User
     public function Login($username, $password)
     {
-        $query     = $this->db->prepare("SELECT * FROM user where username = ?");
+        $query = $this->db->prepare("CALL GetUserByUsername(?)");
         $query->execute(array($username));
         $Loginuser = $query->fetch(PDO::FETCH_ASSOC);
         if (password_verify($password, $Loginuser['password'])) {
@@ -37,43 +37,82 @@ class DBManager
     // Register User
     function registerUser(user $user)
     {
-        // Check if username already exists
-        $checkUsernameQuery = "SELECT * FROM user WHERE username = :user;";
-        $stmt = $this->db->prepare($checkUsernameQuery);
-        $stmt->execute(array(':user' => $user->getUsername()));
-        $result = !!$stmt->fetch(PDO::FETCH_ASSOC);
+        $accessLevel = $user->getAccessLevel();
+        $username = $user->getUsername();
+        $password = password_hash($user->getPassword(), PASSWORD_DEFAULT);
+        $firstName = $user->getFirstName();
+        $lastName = $user->getLastName();
 
-        if (!$result) { // Create User
-            $query = $this->db->prepare("INSERT INTO user VALUES(DEFAULT, DEFAULT, ?, ?, ?, ?)");
-            $query->execute(array(
-                $user->getUsername(),
-                password_hash($user->getPassword(), PASSWORD_DEFAULT),
-                $user->getFirstName(),
-                $user->getLastName(),
-            ));
+        $stmt = $this->db->prepare("CALL RegisterUser(:accessLevel, :username, :password, :firstName, :lastName, @output)");
+        $stmt->bindParam(':accessLevel', $accessLevel);
+        $stmt->bindParam(':username', $username);
+        $stmt->bindParam(':password', $password);
+        $stmt->bindParam(':firstName', $firstName);
+        $stmt->bindParam(':lastName', $lastName);
+
+        // call the stored procedure
+        $stmt->execute();
+
+        // fetch the output
+        $output = $this->db->query("select @output")->fetch(PDO::FETCH_COLUMN);
+
+        if ($output == 1) { // Account Created
             return true;
-        } else { // Username already exists
+        } elseif ($output == 0) { // Username already taken
+            return false;
+        } else { // It shouldnt go here
             return false;
         }
     }
 
     // Get User By ID
-    function getUser($id)
+    function getUserById($id)
     {
-        $query = $this->db->prepare("SELECT * FROM `user` WHERE id = ?");
+        $query = $this->db->prepare("CALL GetUserById(?)");
         $query->execute(array($id));
         $data = $query->fetch(PDO::FETCH_ASSOC);
-        $user = new user($data);
 
+        if ($data == null) {
+            $user = null;
+        } else {
+            $user = new user($data);
+        }
         return $user;
     }
 
-    // Wildcard search query
-    function searchUser($keyword)
+    // Get all teachers
+    function getAllTeachers()
     {
-        $query = $this->db->prepare("SELECT * FROM `user` WHERE id LIKE ? OR username LIKE ? OR firstName LIKE ? OR lastName LIKE ?");
-        $query->execute(array(/*"%" . */$keyword/* . "%"*/, "%" . $keyword . "%", "%" . $keyword . "%"));
-        $results = $query->fetchAll(PDO::FETCH_ASSOC);
-        return $results;
+        $query = $this->db->prepare("CALL GetAllTeachers");
+        $query->execute();
+        $data = $query->fetchAll(PDO::FETCH_ASSOC);
+        return $data;
     }
+
+    // Create Course
+    function createCourse(course $course)
+    {
+        $teacherId = $course->getTeacherId();
+        $courseName = $course->getCourseName();
+        $startDate = $course->getStartDate();
+        $endDate = $course->getEndDate();
+
+        $query = $this->db->prepare("CALL CreateCourse(?, ?, ?, ?)");
+
+        $query->bindParam(1, $teacherId);
+        $query->bindParam(2, $courseName);
+        $query->bindParam(3, $startDate);
+        $query->bindParam(4, $endDate);
+
+        $query->execute();
+    }
+
+    // Wildcard user search query
+    // function searchUser($keyword)
+    // {
+    //     $query = $this->db->prepare("SELECT * FROM `user` WHERE id LIKE ? OR username LIKE ? OR firstName LIKE ? OR lastName LIKE ?");
+    //     $query->execute(array(/*"%" . */$keyword/* . "%"*/, "%" . $keyword . "%", "%" . $keyword . "%"));
+    //     $results = $query->fetchAll(PDO::FETCH_ASSOC);
+    //     return $results;
+    // }
 }
