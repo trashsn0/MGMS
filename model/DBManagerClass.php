@@ -26,7 +26,7 @@ class DBManager
     // Login User
     public function Login($username, $password)
     {
-        $query     = $this->db->prepare("CALL GetUserByUsername(?)");
+        $query = $this->db->prepare("CALL GetUserByUsername(?)");
         $query->execute(array($username));
         $Loginuser = $query->fetch(PDO::FETCH_ASSOC);
         if (password_verify($password, $Loginuser['password'])) {
@@ -37,47 +37,32 @@ class DBManager
     // Register User
     function registerUser(user $user)
     {
-        $query = "CALL RegisterUser(?, ?, ?, ?, ?, ?)";
-        $stmt = $this->db->prepare($query);
-        $stmt->bindParam(1, $user->getAccessLevel(), PDO::PARAM_INT);
-        $stmt->bindParam(2, $user->getUsername(), PDO::PARAM_STR);
-        $stmt->bindParam(3, $user->getPassword(), PDO::PARAM_STR);
-        $stmt->bindParam(4, $user->getFirstName(), PDO::PARAM_STR);
-        $stmt->bindParam(5, $user->getLastName(), PDO::PARAM_STR);
-        $stmt->bindParam(6, $return_value, PDO::PARAM_STR, 4000);
+        $accessLevel = $user->getAccessLevel();
+        $username = $user->getUsername();
+        $password = password_hash($user->getPassword(), PASSWORD_DEFAULT);
+        $firstName = $user->getFirstName();
+        $lastName = $user->getLastName();
+
+        $stmt = $this->db->prepare("CALL RegisterUser(:accessLevel, :username, :password, :firstName, :lastName, @output)");
+        $stmt->bindParam(':accessLevel', $accessLevel);
+        $stmt->bindParam(':username', $username);
+        $stmt->bindParam(':password', $password);
+        $stmt->bindParam(':firstName', $firstName);
+        $stmt->bindParam(':lastName', $lastName);
+
+        // call the stored procedure
         $stmt->execute();
 
+        // fetch the output
+        $output = $this->db->query("select @output")->fetch(PDO::FETCH_COLUMN);
 
-        return $return_value;
-
-        // if ($return_value == 0) {
-        //     return true;
-        // } elseif ($return_value == 1) {
-        //     return false;
-        // } else {
-        //     return false;
-        // }
-
-        // $checkUsernameQuery = "SELECT * FROM user WHERE username = :user;";
-        // $stmt = $this->db->prepare($checkUsernameQuery);
-        // $stmt->execute(array(':user' => $user->getUsername()));
-        // $result = !!$stmt->fetch(PDO::FETCH_ASSOC);
-
-        // if (!$result) { // Create User
-
-        //     $query = $this->db->prepare("INSERT INTO user VALUES(DEFAULT, ?, ?, ?, ?, ?)");
-
-        //     $query->execute(array(
-        //         $user->getAccessLevel(),
-        //         $user->getUsername(),
-        //         password_hash($user->getPassword(), PASSWORD_DEFAULT),
-        //         $user->getFirstName(),
-        //         $user->getLastName(),
-        //     ));
-        //     return true;
-        // } else { // Username already exists
-        //     return false;
-        // }
+        if ($output == 1) { // Account Created
+            return true;
+        } elseif ($output == 0) { // Username already taken
+            return false;
+        } else { // It shouldnt go here
+            return false;
+        }
     }
 
     // Get User By ID
@@ -95,12 +80,39 @@ class DBManager
         return $user;
     }
 
-    // Wildcard search query
-    function searchUser($keyword)
+    // Get all teachers
+    function getAllTeachers()
     {
-        $query = $this->db->prepare("SELECT * FROM `user` WHERE id LIKE ? OR username LIKE ? OR firstName LIKE ? OR lastName LIKE ?");
-        $query->execute(array(/*"%" . */$keyword/* . "%"*/, "%" . $keyword . "%", "%" . $keyword . "%"));
-        $results = $query->fetchAll(PDO::FETCH_ASSOC);
-        return $results;
+        $query = $this->db->prepare("CALL GetAllTeachers");
+        $query->execute();
+        $data = $query->fetchAll(PDO::FETCH_ASSOC);
+        return $data;
     }
+
+    // Create Course
+    function createCourse(course $course)
+    {
+        $teacherId = $course->getTeacherId();
+        $courseName = $course->getCourseName();
+        $startDate = $course->getStartDate();
+        $endDate = $course->getEndDate();
+
+        $query = $this->db->prepare("CALL CreateCourse(?, ?, ?, ?)");
+
+        $query->bindParam(1, $teacherId);
+        $query->bindParam(2, $courseName);
+        $query->bindParam(3, $startDate);
+        $query->bindParam(4, $endDate);
+
+        $query->execute();
+    }
+
+    // Wildcard user search query
+    // function searchUser($keyword)
+    // {
+    //     $query = $this->db->prepare("SELECT * FROM `user` WHERE id LIKE ? OR username LIKE ? OR firstName LIKE ? OR lastName LIKE ?");
+    //     $query->execute(array(/*"%" . */$keyword/* . "%"*/, "%" . $keyword . "%", "%" . $keyword . "%"));
+    //     $results = $query->fetchAll(PDO::FETCH_ASSOC);
+    //     return $results;
+    // }
 }

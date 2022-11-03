@@ -1,6 +1,15 @@
 <!-- JUST TO QUICKLY CREATE DB ENTRIES AND TEST SQL QUERIES -->
 <!-- DELETE BEFORE DEPLOYMENT -->
 
+<?php
+spl_autoload_register(function ($class) {
+    include "model/{$class}Class.php";
+});
+
+$db = new DBManager();
+session_start();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -19,28 +28,70 @@
 </head>
 
 <body>
-    <h1>Create Teacher</h1>
-    <form method="POST" action="test.php">
-        <input type="text" name="teacherUsername">
-        <input type="text" name="teacherPassword">
-        <input type="submit" name="createTeacher" id="createTeacher">
-    </form>
-    <br>
-    <hr><br>
+    <h1>No Validation</h1>
 
-    <a href="view/loginView.php" type="button" class="btn btn-primary">LogIn/Register </a>
+    <br>
+    <hr>
+    <br>
+
+    <h2>Create Teacher</h1>
+        <form method="POST" action="test.php">
+            <label for="username">Username:</label>
+            <input type="text" name="teacherUsername">
+
+            <label for="password">Password:</label>
+            <input type="text" name="teacherPassword">
+
+            <input type="submit" name="createTeacher" id="createTeacher">
+        </form>
+
+        <br>
+        <hr>
+        <br>
+
+        <h2>Create Course</h1>
+            <?php
+            $teachers = $db->getAllTeachers();
+            ?>
+            <form method="POST" action="test.php">
+
+                <label for="teacherId">Teacher:</label>
+                <select id="teacherId" name="teacherId">
+                    <option value=""></option>
+                    <?php
+                    if (!empty($teachers)) {
+                        foreach ($teachers as $key) {
+                    ?>
+                            <option value="<?php echo $key['id']; ?>"><?php echo $key['firstName'] . ' ' . $key['lastName']; ?></option>
+                    <?php
+                        }
+                    }
+                    ?>
+                </select>
+
+                <label for="courseName">Course Name:</label>
+                <input type="text" name="courseName">
+
+                <label for="startDate">Start Date:</label>
+                <input type="date" name="startDate">
+
+                <label for="endDate">End Date:</label>
+                <input type="date" name="endDate">
+
+                <input type="submit" name="createCourse" id="createCourse">
+            </form>
+
+            <br>
+            <hr>
+            <br>
+
+            <a href="view/loginView.php" type="button" class="btn btn-primary">LogIn/Register </a>
 
 </body>
 
 </html>
 
 <?php
-spl_autoload_register(function ($class) {
-    include "model/{$class}Class.php";
-});
-
-$db = new DBManager();
-session_start();
 
 if (isset($_POST['createTeacher'])) {
     $array['id'] = 0;
@@ -52,8 +103,27 @@ if (isset($_POST['createTeacher'])) {
 
     $user = new user($array);
 
-    $exists = $db->registerUser($user);
+    $userExists = $db->registerUser($user);
 
-    var_dump($exists);
+    if ($userExists == true) {
+        echo "Teacher created";
+    } else {
+        echo "Teacher not created";
+    }
 }
+
+
+if (isset($_POST['createCourse'])) {
+    $array['id'] = 0;
+    $array['teacherId'] = $_POST['teacherId'];
+    $array['courseName'] = $_POST['courseName'];
+    $array['startDate'] = $_POST['startDate'];
+    $array['endDate'] = $_POST['endDate'];
+    $array['active'] = 0;
+
+    $course = new course($array);
+    $result = $db->createCourse($course);
+    echo "Course created";
+}
+
 ?>
