@@ -73,12 +73,12 @@
   align-items: center;
 }
 
-.vertical-center {
-  min-height: 100%;
-  min-height: 100vh;
+input[type=text] {
+  padding: 6px 10px;
+}
 
-  display: flex;
-  align-items: center;
+input[type=password] {
+  padding: 6px 10px;
 }
 
 *,

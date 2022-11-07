@@ -34,6 +34,21 @@ class DBManager
         }
     }
 
+    // Get User By ID
+    function getUserById($id)
+    {
+        $query = $this->db->prepare("CALL GetUserById(?)");
+        $query->execute(array($id));
+        $data = $query->fetch(PDO::FETCH_ASSOC);
+
+        if ($data == null) {
+            $user = null;
+        } else {
+            $user = new user($data);
+        }
+        return $user;
+    }
+
     // Register User
     function registerUser(user $user)
     {
@@ -65,19 +80,42 @@ class DBManager
         }
     }
 
-    // Get User By ID
-    function getUserById($id)
+    // Change user password
+    function changePassword($id, $newPassword)
     {
-        $query = $this->db->prepare("CALL GetUserById(?)");
-        $query->execute(array($id));
-        $data = $query->fetch(PDO::FETCH_ASSOC);
+        $pw = password_hash($newPassword, PASSWORD_DEFAULT);
 
-        if ($data == null) {
-            $user = null;
-        } else {
-            $user = new user($data);
+        $stmt = $this->db->prepare("CALL ChangePassword(:id, :password)");
+        $stmt->bindParam(':id', $id);
+        $stmt->bindParam(':password', $pw);
+        $stmt->execute();
+        return true;
+    }
+
+    // Update User Information
+    function updateUser(user $user)
+    {
+        $id = $user->getId();
+        $username = $user->getUsername();
+        $firstName = $user->getFirstName();
+        $lastName = $user->getLastName();
+
+        $stmt = $this->db->prepare("CALL UpdateUser(:id, :username, :firstName, :lastName, @output)");
+        $stmt->bindParam(':id', $id);
+        $stmt->bindParam(':username', $username);
+        $stmt->bindParam(':firstName', $firstName);
+        $stmt->bindParam(':lastName', $lastName);
+        $stmt->execute();
+
+        $output = $this->db->query("select @output")->fetch(PDO::FETCH_COLUMN);
+
+        if ($output == 1) { // Account Updated
+            return true;
+        } elseif ($output == 0) { // Username already taken
+            return false;
+        } else { // It shouldnt go here
+            return false;
         }
-        return $user;
     }
 
     // Get all teachers

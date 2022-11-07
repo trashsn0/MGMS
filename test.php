@@ -28,64 +28,71 @@ session_start();
 </head>
 
 <body>
-    <h1>No Validation</h1>
+    <div class="vertical-center">
+        <div class="container" style="text-align: center;">
 
-    <br>
-    <hr>
-    <br>
-
-    <h2>Create Teacher</h1>
-        <form method="POST" action="test.php">
-            <label for="username">Username:</label>
-            <input type="text" name="teacherUsername">
-
-            <label for="password">Password:</label>
-            <input type="text" name="teacherPassword">
-
-            <input type="submit" name="createTeacher" id="createTeacher">
-        </form>
-
-        <br>
-        <hr>
-        <br>
-
-        <h2>Create Course</h1>
-            <?php
-            $teachers = $db->getAllTeachers();
-            ?>
-            <form method="POST" action="test.php">
-
-                <label for="teacherId">Teacher:</label>
-                <select id="teacherId" name="teacherId">
-                    <option value=""></option>
-                    <?php
-                    if (!empty($teachers)) {
-                        foreach ($teachers as $key) {
-                    ?>
-                            <option value="<?php echo $key['id']; ?>"><?php echo $key['firstName'] . ' ' . $key['lastName']; ?></option>
-                    <?php
-                        }
-                    }
-                    ?>
-                </select>
-
-                <label for="courseName">Course Name:</label>
-                <input type="text" name="courseName">
-
-                <label for="startDate">Start Date:</label>
-                <input type="date" name="startDate">
-
-                <label for="endDate">End Date:</label>
-                <input type="date" name="endDate">
-
-                <input type="submit" name="createCourse" id="createCourse">
-            </form>
+            <h1>Quick Create Teachers And Courses</h1>
 
             <br>
             <hr>
             <br>
 
-            <a href="view/loginView.php" type="button" class="btn btn-primary">LogIn/Register </a>
+            <h2>Create Teacher</h1>
+                <form method="POST" action="test.php">
+                    <label for="username">Username:</label>
+                    <input type="text" name="teacherUsername">
+
+                    <label for="password">Password:</label>
+                    <input type="text" name="teacherPassword">
+
+                    <input type="submit" name="createTeacher" id="createTeacher">
+                </form>
+
+                <br>
+                <hr>
+                <br>
+
+                <h2>Create Course</h1>
+                    <?php
+                    $teachers = $db->getAllTeachers();
+                    ?>
+                    <form method="POST" action="test.php">
+
+                        <label for="teacherId">Teacher:</label>
+                        <select id="teacherId" name="teacherId">
+                            <option value=""></option>
+                            <?php
+                            if (!empty($teachers)) {
+                                foreach ($teachers as $key) {
+                            ?>
+                                    <option value="<?php echo $key['id']; ?>"><?php echo $key['firstName'] . ' ' . $key['lastName']; ?></option>
+                            <?php
+                                }
+                            }
+                            ?>
+                        </select>
+
+                        <label for="courseName">Course Name:</label>
+                        <input type="text" name="courseName">
+
+                        <label for="startDate">Start Date:</label>
+                        <input type="date" name="startDate">
+
+                        <label for="endDate">End Date:</label>
+                        <input type="date" name="endDate">
+
+                        <input type="submit" name="createCourse" id="createCourse">
+                    </form>
+
+                    <br>
+                    <hr>
+                    <br>
+
+                    <a href="view/loginView.php" type="button" class="btn btn-primary">LogIn/Register </a>
+        </div>
+    </div>
+
+
 
 </body>
 

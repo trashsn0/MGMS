@@ -16,6 +16,11 @@ DELIMITER $$
 --
 -- Procedures
 --
+DROP PROCEDURE IF EXISTS `ChangePassword`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `ChangePassword` (IN `userIdInput` INT, IN `passwordInput` VARCHAR(255))  BEGIN
+	UPDATE user SET password = passwordInput WHERE id = userIdInput;
+END$$
+
 DROP PROCEDURE IF EXISTS `CreateCourse`$$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `CreateCourse` (IN `teacherIdInput` INT, IN `courseNameInput` VARCHAR(255), IN `startDateInput` DATE, IN `endDateInput` DATE)  BEGIN
 	INSERT INTO course VALUES(DEFAULT, teacherIdInput, courseNameInput, startDateInput, endDateInput, DEFAULT);
@@ -44,10 +49,20 @@ END$$
 DROP PROCEDURE IF EXISTS `RegisterUser`$$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `RegisterUser` (IN `accessLevelInput` INT(255), IN `usernameInput` VARCHAR(255), IN `passwordInput` VARCHAR(255), IN `firstNameInput` VARCHAR(255), IN `lastNameInput` VARCHAR(255), OUT `isCreated` BOOLEAN)  BEGIN
 	IF NOT EXISTS(SELECT * FROM `user` WHERE username = usernameInput) THEN
-		INSERT INTO user VALUES(DEFAULT, accessLevelInput, usernameInput, passwordInput, firstNameInput, lastNameInput);
+		INSERT INTO user VALUES(NULL, accessLevelInput, usernameInput, passwordInput, firstNameInput, lastNameInput);
         SET isCreated = TRUE;
     ELSE
 		SET isCreated = FALSE;
+    END IF;
+END$$
+
+DROP PROCEDURE IF EXISTS `UpdateUser`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `UpdateUser` (IN `userIdInput` INT, IN `usernameInput` VARCHAR(255), IN `firstNameInput` VARCHAR(255), IN `lastNameInput` VARCHAR(255), OUT `isUpdated` BOOLEAN)  BEGIN
+	IF NOT EXISTS(SELECT * FROM `user` WHERE username = usernameInput) THEN
+		UPDATE user SET username = usernameInput, firstName = firstNameInput, lastName = lastNameInput WHERE id = userIdInput;
+        SET isUpdated = TRUE;
+    ELSE
+		SET isUpdated = FALSE;
     END IF;
 END$$
 
@@ -69,7 +84,7 @@ CREATE TABLE IF NOT EXISTS `course` (
   `active` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0 == Active\r\n1 == Innactive',
   PRIMARY KEY (`id`),
   KEY `teacherId` (`teacherId`)
-) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -102,7 +117,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   `firstName` varchar(255) NOT NULL,
   `lastName` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

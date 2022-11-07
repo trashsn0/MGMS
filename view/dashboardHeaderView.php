@@ -25,7 +25,7 @@ if (!isset($_SESSION['loggedInUser'])) {
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" id="mainNav">
         <div class="container px-4">
-            <a class="navbar-brand" href="#page-top">MGMS</a>
+            <a class="navbar-brand" href="dashboardView.php">MGMS</a>
             <div class="collapse navbar-collapse" id="navbarResponsive">
                 <ul class="navbar-nav navbar-nav ml-auto ">
                     <!-- Show Teacher Options -->
@@ -46,7 +46,15 @@ if (!isset($_SESSION['loggedInUser'])) {
                     <?php if ($_SESSION['loggedInUser']['accessLevel'] == 0) : ?>
                         <li class="nav-item"><a class="nav-link" href="">Courses</a></li>
                     <?php endif; ?>
-                    <li class="nav-item"><a class="nav-link" href="../controller/logout.php">Logout</a></li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <?php echo $_SESSION['loggedInUser']['firstName'] . ' ' . $_SESSION['loggedInUser']['lastName']; ?>
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="profileView.php">Profile</a>
+                            <a class="dropdown-item" href="../controller/logout.php">Logout</a>
+                        </div>
+                    </li>
                 </ul>
             </div>
         </div>

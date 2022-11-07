@@ -6,10 +6,7 @@ include "dashboardHeaderView.php";
 <html>
 
 <head>
-    <title>MGMS - Grade Management System </title>
-    <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
-    <!-- Core theme CSS (includes Bootstrap)-->
-    <link href="css/styles.css" rel="stylesheet" />
+
 </head>
 
 <body>
