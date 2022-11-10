@@ -4,6 +4,11 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
+        
+        th{
+            width: 2500px;
+        }
+        
         .collapsible {
             background-color: #777;
             color: white;
@@ -16,6 +21,7 @@
             font-size: 15px;
         }
 
+        
         .active,
         .collapsible:hover {
             background-color: #555;
@@ -31,7 +37,7 @@
     </style>
 </head>
 
-<body>
+<body id="test">
 
     <h2>Assessments</h2>
 
@@ -39,9 +45,9 @@
     <button class="collapsible">
         <table>
             <tr>
-                <th style="width: 3000px;">Assessment 1</th>
-                <th style="width: 1200px; text-align: center;">Weight 10%</th>
-                <th style="width: 1200px; text-align: center;">Grade 15/20</th>
+                <th >Assessment 1</th>
+                <th style="text-align: center;">Weight 10%</th>
+                <th style="text-align: center;">Grade 15/20</th>
             </tr>
         </table>
     </button>
@@ -54,9 +60,9 @@
     <button class="collapsible">
         <table>
             <tr>
-                <th style="width: 3000px;">Assessment 2</th>
-                <th style="width: 1200px; text-align: center;">Weight 10%</th>
-                <th style="width: 1200px; text-align: center;">Grade 25/30</th>
+                <th>Assessment 2</th>
+                <th style="text-align: center;">Weight 10%</th>
+                <th style="text-align: center;">Grade 25/30</th>
             </tr>
         </table>
     </button>
@@ -68,9 +74,9 @@
     <button class="collapsible">
         <table>
             <tr>
-                <th style="width: 3000px;">Midterm</th>
-                <th style="width: 1200px; text-align: center;">Weight 30%</th>
-                <th style="width: 1200px; text-align: center;">Grade 28/40</th>
+                <th>Midterm</th>
+                <th style="text-align: center;">Weight 30%</th>
+                <th style="text-align: center;">Grade 28/40</th>
             </tr>
         </table>
     </button>
@@ -79,27 +85,47 @@
             dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex
             ea commodo consequat.</p>
     </div>
-
-    <button type="submit" name="Add Assessment" onclick="CreateNewDom();">Add Assessment</button>
-    <form id="editor" method="post">
-    </form>
-
+    
     <script>
-        function CreateAssessment() {
-            var body = document.getElementsByTagName('body')[0];
+        function AddAssessment() {
             var assessment = document.createElement("button");
             assessment.setAttribute("class", "collapsible");
             var tbl = document.createElement("table");
-            var tbdy = document.createElement("tbody");
+            assessment.appendChild(tbl);
             var tr = document.createElement("tr");
-            for (var=0; var< 3; var++)
-            var th = document.createElement("th");
+            tbl.appendChild(tr);
+            
+            var th1 = document.createElement("th");
+            tr.appendChild(th1);
+            var txt1 = document.createTextNode("Assignment");
+            th1.appendChild(txt1);
+            
+            var th2 = document.createElement("th");
+            tr.appendChild(th2);
+            var txt2 = document.createTextNode("Weight: ");
+            th1.appendChild(txt2);
+            
+            var th3 = document.createElement("th");
+            tr.appendChild(th3);
+            var txt3 = document.createTextNode("Grade: ");
+            th1.appendChild(txt3);            
+            
 
-
-
-            Assessment.
+            var cnt = document.createElement("div");
+            cnt.setAttribute("class", "content");            
+            var para = document.createElement("p");
+            cnt.appendChild(para);
+            var paraTxt = document.createTextNode("Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip exea commodo consequat.")
+            para.appendChild(paraTxt);            
+            
+            
+            document.getElementById("test").appendChild(assessment);
+            document.getElementById("test").appendChild(cnt);
         }
     </script>
+    <button type="submit" name="AddButton" onclick="AddAssessment();">Add Assessment</button>
+    <form id="editor" method="post">
+    </form>   
 
 
     <script>
@@ -117,6 +143,9 @@
                 }
             });
         }
+
+        
+
     </script>
 
 </body>
