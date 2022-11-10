@@ -31,12 +31,6 @@ session_start();
     <div class="vertical-center">
         <div class="container" style="text-align: center;">
 
-            <h1>Quick Create Teachers And Courses</h1>
-
-            <br>
-            <hr>
-            <br>
-
             <h2>Create Teacher</h1>
                 <form method="POST" action="test.php">
                     <label for="username">Username:</label>
@@ -49,50 +43,30 @@ session_start();
                 </form>
 
                 <br>
+                <a href="view/loginView.php" type="button" class="btn btn-primary">LogIn/Register</a>
+                <br>
                 <hr>
                 <br>
 
-                <h2>Create Course</h1>
-                    <?php
-                    $teachers = $db->getAllTeachers();
-                    ?>
-                    <form method="POST" action="test.php">
+                <h2>Create Assessment</h2>
+                <form method="POST" action="test.php">
+                    <label for="name">Name:</label>
+                    <input type="text" name="assignmentName">
 
-                        <label for="teacherId">Teacher:</label>
-                        <select id="teacherId" name="teacherId">
-                            <option value=""></option>
-                            <?php
-                            if (!empty($teachers)) {
-                                foreach ($teachers as $key) {
-                            ?>
-                                    <option value="<?php echo $key['id']; ?>"><?php echo $key['firstName'] . ' ' . $key['lastName']; ?></option>
-                            <?php
-                                }
-                            }
-                            ?>
-                        </select>
+                    <label for="weight">Weight:</label>
+                    <input type="number" name="assignmentWeight">
 
-                        <label for="courseName">Course Name:</label>
-                        <input type="text" name="courseName">
+                    <label for="numberOfQuestions">Number Of Questions:</label>
+                    <input type="number" name="numberOfQuestions">
 
-                        <label for="startDate">Start Date:</label>
-                        <input type="date" name="startDate">
+                    <label for="weight">Due Date:</label>
+                    <input type="date" name="assignmentDueDate">
 
-                        <label for="endDate">End Date:</label>
-                        <input type="date" name="endDate">
+                    <input type="submit" name="createAssignment" id="createAssignment">
+                </form>
 
-                        <input type="submit" name="createCourse" id="createCourse">
-                    </form>
-
-                    <br>
-                    <hr>
-                    <br>
-
-                    <a href="view/loginView.php" type="button" class="btn btn-primary">LogIn/Register </a>
         </div>
     </div>
-
-
 
 </body>
 
@@ -119,18 +93,22 @@ if (isset($_POST['createTeacher'])) {
     }
 }
 
-
-if (isset($_POST['createCourse'])) {
+if (isset($_POST['createAssignment'])) {
     $array['id'] = 0;
-    $array['teacherId'] = $_POST['teacherId'];
-    $array['courseName'] = $_POST['courseName'];
-    $array['startDate'] = $_POST['startDate'];
-    $array['endDate'] = $_POST['endDate'];
-    $array['active'] = 0;
+    $array['name'] = $_POST['assignmentName'];
+    $array['weight'] = $_POST['assignmentWeight'];
+    $array['numberOfQuestions'] = $_POST['numberOfQuestions'];
+    $array['dueDate'] = $_POST['assignmentDueDate'];
 
-    $course = new course($array);
-    $result = $db->createCourse($course);
-    echo "Course created";
+    $assessment = new assessment($array);
+
+    $assignmentExists = $db->createAssessment($assessment);
+
+    if ($assignmentExists == true) {
+        echo "Assessment created";
+    } else {
+        echo "Assessment not created";
+    }
 }
 
 ?>

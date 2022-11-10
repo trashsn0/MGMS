@@ -65,10 +65,54 @@
   --bs-body-bg: #fff;
 }
 
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 1000px;
+  margin: 50px auto;
+  padding: 25px;
+}
+
+.tabs input[type="radio"] {
+  display: none;
+}
+
+.tabs label {
+  padding: 25px;
+  background: white;
+  font-weight: bold;
+}
+
+.tabs .tab {
+  width: 100%;
+  padding: 20px;
+  background: white;
+  order: 1;
+  display: none;
+
+}
+
+.tabs .tab h3 {
+  font-size: 3em;
+}
+
+.tabs input[type="radio"]:checked+label+.tab {
+  display: block;
+}
+
+.tabs input[type="radio"]:checked+label {
+  border-radius: 25px;
+  color: white;
+  background: #212529;
+}
+
+.tabs .tab h4 {
+  float: left;
+}
+
 .vertical-center {
   min-height: 100%;
   min-height: 100vh;
-
   display: flex;
   align-items: center;
 }

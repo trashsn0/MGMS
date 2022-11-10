@@ -1,3 +1,12 @@
+-- phpMyAdmin SQL Dump
+-- version 5.1.1
+-- https://www.phpmyadmin.net/
+--
+-- Host: 127.0.0.1:3306
+-- Generation Time: Nov 10, 2022 at 04:23 PM
+-- Server version: 5.7.36
+-- PHP Version: 7.4.26
+
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
@@ -21,9 +30,19 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `ChangePassword` (IN `userIdInput` I
 	UPDATE user SET password = passwordInput WHERE id = userIdInput;
 END$$
 
-DROP PROCEDURE IF EXISTS `CreateCourse`$$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `CreateCourse` (IN `teacherIdInput` INT, IN `courseNameInput` VARCHAR(255), IN `startDateInput` DATE, IN `endDateInput` DATE)  BEGIN
-	INSERT INTO course VALUES(DEFAULT, teacherIdInput, courseNameInput, startDateInput, endDateInput, DEFAULT);
+DROP PROCEDURE IF EXISTS `CreateAssessment`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `CreateAssessment` (IN `nameInput` VARCHAR(255), IN `weightInput` INT, IN `numberOfQuestionsInput` INT, IN `dueDateInput` DATE, OUT `isCreated` BOOLEAN)  BEGIN
+	IF NOT EXISTS(SELECT * FROM `assessments` WHERE name = nameInput) THEN
+		INSERT INTO assessments VALUES(NULL, nameInput, weightInput, numberOfQuestionsInput, dueDateInput);
+        SET isCreated = TRUE;
+    ELSE
+		SET isCreated = FALSE;
+    END IF;
+END$$
+
+DROP PROCEDURE IF EXISTS `GetAllAssessments`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `GetAllAssessments` ()  BEGIN
+	SELECT * FROM assessments;
 END$$
 
 DROP PROCEDURE IF EXISTS `GetAllTeachers`$$
@@ -71,36 +90,18 @@ DELIMITER ;
 -- --------------------------------------------------------
 
 --
--- Table structure for table `course`
+-- Table structure for table `assessments`
 --
 
-DROP TABLE IF EXISTS `course`;
-CREATE TABLE IF NOT EXISTS `course` (
-  `id` int(255) NOT NULL AUTO_INCREMENT,
-  `teacherId` int(255) NOT NULL,
-  `courseName` varchar(255) NOT NULL,
-  `startDate` date NOT NULL,
-  `endDate` date NOT NULL,
-  `active` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0 == Active\r\n1 == Innactive',
-  PRIMARY KEY (`id`),
-  KEY `teacherId` (`teacherId`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `course_enrollment`
---
-
-DROP TABLE IF EXISTS `course_enrollment`;
-CREATE TABLE IF NOT EXISTS `course_enrollment` (
-  `id` int(255) NOT NULL AUTO_INCREMENT,
-  `userid` int(255) NOT NULL,
-  `courseId` int(255) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `courseId` (`courseId`),
-  KEY `userid` (`userid`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+DROP TABLE IF EXISTS `assessments`;
+CREATE TABLE IF NOT EXISTS `assessments` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `weight` int(11) NOT NULL,
+  `numberOfQuestions` int(11) NOT NULL,
+  `dueDate` date NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -117,7 +118,8 @@ CREATE TABLE IF NOT EXISTS `user` (
   `firstName` varchar(255) NOT NULL,
   `lastName` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

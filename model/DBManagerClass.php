@@ -127,30 +127,41 @@ class DBManager
         return $data;
     }
 
-    // Create Course
-    function createCourse(course $course)
+    // Get all assignments
+    function getAllAssessment()
     {
-        $teacherId = $course->getTeacherId();
-        $courseName = $course->getCourseName();
-        $startDate = $course->getStartDate();
-        $endDate = $course->getEndDate();
-
-        $query = $this->db->prepare("CALL CreateCourse(?, ?, ?, ?)");
-
-        $query->bindParam(1, $teacherId);
-        $query->bindParam(2, $courseName);
-        $query->bindParam(3, $startDate);
-        $query->bindParam(4, $endDate);
-
+        $query = $this->db->prepare("CALL GetAllAssessments");
         $query->execute();
+        $data = $query->fetchAll(PDO::FETCH_ASSOC);
+        return $data;
     }
 
-    // Wildcard user search query
-    // function searchUser($keyword)
-    // {
-    //     $query = $this->db->prepare("SELECT * FROM `user` WHERE id LIKE ? OR username LIKE ? OR firstName LIKE ? OR lastName LIKE ?");
-    //     $query->execute(array(/*"%" . */$keyword/* . "%"*/, "%" . $keyword . "%", "%" . $keyword . "%"));
-    //     $results = $query->fetchAll(PDO::FETCH_ASSOC);
-    //     return $results;
-    // }
+    // Create new assignment
+    function createAssessment(assessment $assessment)
+    {
+        $name = $assessment->getName();
+        $weight = $assessment->getWeight();
+        $numberOfQuestions = $assessment->getNumberOfQuestions();
+        $dueDate = $assessment->getDueDate();
+
+        $stmt = $this->db->prepare("CALL CreateAssessment(:name, :weight, :numberOfQuestions, :dueDate, @output)");
+        $stmt->bindParam(':name', $name);
+        $stmt->bindParam(':weight', $weight);
+        $stmt->bindParam(':numberOfQuestions', $numberOfQuestions);
+        $stmt->bindParam(':dueDate', $dueDate);
+
+        // call the stored procedure
+        $stmt->execute();
+
+        // fetch the output
+        $output = $this->db->query("select @output")->fetch(PDO::FETCH_COLUMN);
+
+        if ($output == 1) { // Assignment Created
+            return true;
+        } elseif ($output == 0) { // Assignment with the same name already exists
+            return false;
+        } else { // It shouldnt go here
+            return false;
+        }
+    }
 }
