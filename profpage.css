@@ -1,0 +1,46 @@
+body {
+  background: white;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+}
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 1000px;
+  margin: 50px auto;
+  padding: 25px;
+  
+
+}
+
+.tabs input[type="radio"] {
+display: none;
+
+}
+.tabs label {
+  padding: 25px;
+  background: white;
+  font-weight: bold;
+}
+.tabs .tab {
+  width: 100%;
+  padding: 20px;
+  background: white;
+  order: 1;
+  display: none;
+
+}
+.tabs .tab h3 {
+  font-size: 3em;
+}
+.tabs input[type="radio"]:checked + label + .tab {
+  display: block;
+}
+.tabs input[type="radio"]:checked + label {
+  border-radius: 25px;
+  background: #73AD21;
+
+
+}
+.tabs .tab h4 {
+  float:left;
+}
