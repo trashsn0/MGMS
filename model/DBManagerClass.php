@@ -34,6 +34,21 @@ class DBManager
         }
     }
 
+    // Get User By ID
+    function getUserById($id)
+    {
+        $query = $this->db->prepare("CALL GetUserById(?)");
+        $query->execute(array($id));
+        $data = $query->fetch(PDO::FETCH_ASSOC);
+
+        if ($data == null) {
+            $user = null;
+        } else {
+            $user = new user($data);
+        }
+        return $user;
+    }
+
     // Register User
     function registerUser(user $user)
     {
@@ -65,19 +80,42 @@ class DBManager
         }
     }
 
-    // Get User By ID
-    function getUserById($id)
+    // Change user password
+    function changePassword($id, $newPassword)
     {
-        $query = $this->db->prepare("CALL GetUserById(?)");
-        $query->execute(array($id));
-        $data = $query->fetch(PDO::FETCH_ASSOC);
+        $pw = password_hash($newPassword, PASSWORD_DEFAULT);
 
-        if ($data == null) {
-            $user = null;
-        } else {
-            $user = new user($data);
+        $stmt = $this->db->prepare("CALL ChangePassword(:id, :password)");
+        $stmt->bindParam(':id', $id);
+        $stmt->bindParam(':password', $pw);
+        $stmt->execute();
+        return true;
+    }
+
+    // Update User Information
+    function updateUser(user $user)
+    {
+        $id = $user->getId();
+        $username = $user->getUsername();
+        $firstName = $user->getFirstName();
+        $lastName = $user->getLastName();
+
+        $stmt = $this->db->prepare("CALL UpdateUser(:id, :username, :firstName, :lastName, @output)");
+        $stmt->bindParam(':id', $id);
+        $stmt->bindParam(':username', $username);
+        $stmt->bindParam(':firstName', $firstName);
+        $stmt->bindParam(':lastName', $lastName);
+        $stmt->execute();
+
+        $output = $this->db->query("select @output")->fetch(PDO::FETCH_COLUMN);
+
+        if ($output == 1) { // Account Updated
+            return true;
+        } elseif ($output == 0) { // Username already taken
+            return false;
+        } else { // It shouldnt go here
+            return false;
         }
-        return $user;
     }
 
     // Get all teachers
@@ -89,30 +127,41 @@ class DBManager
         return $data;
     }
 
-    // Create Course
-    function createCourse(course $course)
+    // Get all assignments
+    function getAllAssessment()
     {
-        $teacherId = $course->getTeacherId();
-        $courseName = $course->getCourseName();
-        $startDate = $course->getStartDate();
-        $endDate = $course->getEndDate();
-
-        $query = $this->db->prepare("CALL CreateCourse(?, ?, ?, ?)");
-
-        $query->bindParam(1, $teacherId);
-        $query->bindParam(2, $courseName);
-        $query->bindParam(3, $startDate);
-        $query->bindParam(4, $endDate);
-
+        $query = $this->db->prepare("CALL GetAllAssessments");
         $query->execute();
+        $data = $query->fetchAll(PDO::FETCH_ASSOC);
+        return $data;
     }
 
-    // Wildcard user search query
-    // function searchUser($keyword)
-    // {
-    //     $query = $this->db->prepare("SELECT * FROM `user` WHERE id LIKE ? OR username LIKE ? OR firstName LIKE ? OR lastName LIKE ?");
-    //     $query->execute(array(/*"%" . */$keyword/* . "%"*/, "%" . $keyword . "%", "%" . $keyword . "%"));
-    //     $results = $query->fetchAll(PDO::FETCH_ASSOC);
-    //     return $results;
-    // }
+    // Create new assignment
+    function createAssessment(assessment $assessment)
+    {
+        $name = $assessment->getName();
+        $weight = $assessment->getWeight();
+        $numberOfQuestions = $assessment->getNumberOfQuestions();
+        $dueDate = $assessment->getDueDate();
+
+        $stmt = $this->db->prepare("CALL CreateAssessment(:name, :weight, :numberOfQuestions, :dueDate, @output)");
+        $stmt->bindParam(':name', $name);
+        $stmt->bindParam(':weight', $weight);
+        $stmt->bindParam(':numberOfQuestions', $numberOfQuestions);
+        $stmt->bindParam(':dueDate', $dueDate);
+
+        // call the stored procedure
+        $stmt->execute();
+
+        // fetch the output
+        $output = $this->db->query("select @output")->fetch(PDO::FETCH_COLUMN);
+
+        if ($output == 1) { // Assignment Created
+            return true;
+        } elseif ($output == 0) { // Assignment with the same name already exists
+            return false;
+        } else { // It shouldnt go here
+            return false;
+        }
+    }
 }

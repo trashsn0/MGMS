@@ -65,7 +65,7 @@
                 </div>
 
                 <div class="form-group row">
-                    <label for="firstName" class="col-sm-2 col-form-label">Frist Name: </label>
+                    <label for="firstName" class="col-sm-2 col-form-label">First Name: </label>
                     <div class="col-sm-10">
                         <input type="text" class="form-control-plaintext border border-dark" id="firstName" name="firstName" value=<?php echo (isset($_SESSION['firstName'])) ? $_SESSION['firstName'] : '' ?>>
                     </div>
