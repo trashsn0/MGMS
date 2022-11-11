@@ -31,42 +31,10 @@
 
                     Your page goes here
                     
-                    <br><br><br>
-                        <h1>Plan for the site</h1>
-                        <img src="assets/img/SitePlan.png" width="1600" height="600" alt="Plan for site">
+                   
                         
 
-                    <h1>Charts exemple you can use</h1>
-                    <div class="card mb-4">
-                        <div class="card-header">
-                            <i class="fas fa-chart-area me-1"></i>
-                            Area Chart Example
-                        </div>
-                        <div class="card-body"><canvas id="myAreaChart" width="100%" height="30"></canvas></div>
-                        <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-6">
-                            <div class="card mb-4">
-                                <div class="card-header">
-                                    <i class="fas fa-chart-bar me-1"></i>
-                                    Bar Chart Example
-                                </div>
-                                <div class="card-body"><canvas id="myBarChart" width="100%" height="50"></canvas></div>
-                                <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
-                            </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="card mb-4">
-                                <div class="card-header">
-                                    <i class="fas fa-chart-pie me-1"></i>
-                                    Pie Chart Example
-                                </div>
-                                <div class="card-body"><canvas id="myPieChart" width="100%" height="50"></canvas></div>
-                                <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
-                            </div>
-                        </div>
-                    </div>
+                    
                 </div>
                 </main>
 
