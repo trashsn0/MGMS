@@ -76,8 +76,8 @@
                             </a>
                             <div class="collapse" id="pagesCollapseAuth" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
                                 <nav class="sb-sidenav-menu-nested nav">
-                                    <a class="nav-link" href="#">Login</a>
-                                    <a class="nav-link" href="#">Register</a>
+                                    <a class="nav-link" href="main/view/loginView.php">Login</a>
+                                    <a class="nav-link" href="main/view/registerUserView.php">Register</a>
                                     <a class="nav-link" href="#">Forgot Password</a>
                                 </nav>
                             </div>
