@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Nov 10, 2022 at 04:23 PM
+-- Generation Time: Nov 15, 2022 at 07:31 PM
 -- Server version: 5.7.36
 -- PHP Version: 7.4.26
 
@@ -42,7 +42,20 @@ END$$
 
 DROP PROCEDURE IF EXISTS `GetAllAssessments`$$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `GetAllAssessments` ()  BEGIN
-	SELECT * FROM assessments;
+	SELECT * FROM assessments
+    ORDER BY dueDate DESC;
+END$$
+
+DROP PROCEDURE IF EXISTS `GetAllQuestionsByUserId`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `GetAllQuestionsByUserId` (IN `userIdInput` INT)  BEGIN
+	SELECT * FROM questions WHERE userId = userIdInput
+    ORDER BY assessmentId , questionNumber;
+END$$
+
+DROP PROCEDURE IF EXISTS `GetAllQuestionsByUserIdAndAssessmentId`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `GetAllQuestionsByUserIdAndAssessmentId` (IN `userIdInput` INT, IN `assessmentIdInput` INT)  BEGIN
+	SELECT * FROM questions WHERE userID = userIdInput AND assessmentId = assessmentIdInput
+    ORDER BY questionNumber;
 END$$
 
 DROP PROCEDURE IF EXISTS `GetAllTeachers`$$
@@ -101,7 +114,25 @@ CREATE TABLE IF NOT EXISTS `assessments` (
   `numberOfQuestions` int(11) NOT NULL,
   `dueDate` date NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `questions`
+--
+
+DROP TABLE IF EXISTS `questions`;
+CREATE TABLE IF NOT EXISTS `questions` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `assessmentId` int(11) NOT NULL,
+  `userId` int(11) NOT NULL,
+  `questionNumber` int(11) NOT NULL,
+  `grade` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `assessmentId` (`assessmentId`),
+  KEY `userId` (`userId`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -119,7 +150,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   `lastName` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
-COMMIT;
+
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
