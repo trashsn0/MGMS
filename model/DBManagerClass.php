@@ -164,4 +164,27 @@ class DBManager
             return false;
         }
     }
+
+    // Get all questions by user Id and assessment Id 
+    function getAllQuestionsByUserIdAndAssessmentId($assessmentId, $userId)
+    {
+        $stmt = $this->db->prepare("CALL GetAllQuestionsByUserIdAndAssessmentId(:assessmentId, :userId)");
+        $stmt->bindParam(':assessmentId', $assessmentId);
+        $stmt->bindParam(':userId', $userId);
+        $stmt->execute();
+
+        $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $data;
+    }
+
+    // Get all questions by user Id
+    function getAllQuestionsByUserId($userId)
+    {
+        $stmt = $this->db->prepare("CALL GetAllQuestionsByUserId(:userId)");
+        $stmt->bindParam(':userId', $userId);
+        $stmt->execute();
+
+        $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $data;
+    }
 }
