@@ -127,6 +127,15 @@ class DBManager
         return $data;
     }
 
+    // Get all STUDENTS
+    function getAllStudents()
+    {
+        $query = $this->db->prepare("CALL GetAllStudents");
+        $query->execute();
+        $data = $query->fetchAll(PDO::FETCH_ASSOC);
+        return $data;
+    }
+
     // Get all assignments
     function getAllAssessment()
     {

@@ -36,7 +36,7 @@ if (!isset($_SESSION['loggedInUser'])) {
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 <a class="dropdown-item" href="assesmentsView.php">View All</a>
                                 <a class="dropdown-item" href="createAssessmentView.php">New Assessment</a>
-                                <a class="dropdown-item" href="#">Input Grades</a>
+                                <a class="dropdown-item" href="inputGradesView.php">Input Grades</a>
                             </div>
                         </li>
                         <li class="nav-item"><a class="nav-link" href="">Statistics</a></li>

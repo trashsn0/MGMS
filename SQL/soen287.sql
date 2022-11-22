@@ -63,6 +63,11 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `GetAllTeachers` ()  BEGIN
 	SELECT id, firstName, lastName FROM user WHERE accessLevel = 1;
 END$$
 
+DROP PROCEDURE IF EXISTS `GetAllStudents`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `GetAllStudents` ()  BEGIN
+	SELECT id, firstName, lastName FROM user WHERE accessLevel = 0;
+END$$
+
 DROP PROCEDURE IF EXISTS `GetAllUsers`$$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `GetAllUsers` ()  BEGIN
 	SELECT * FROM user;
