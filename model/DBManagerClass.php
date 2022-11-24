@@ -196,4 +196,15 @@ class DBManager
         $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
         return $data;
     }
+
+    // Get number of questions by assessment Id
+    function getNumberOfQuestions($assessmentId)
+    {
+        $stmt = $this->db->prepare("CALL GetNumberOfQuestions(:assessmentId)");
+        $stmt->bindParam(':assessmentId', $assessmentId);
+        $stmt->execute();
+
+        $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $data;
+    }
 }

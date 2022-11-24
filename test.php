@@ -68,6 +68,13 @@ session_start();
         </div>
     </div>
 
+    <?php
+
+    $questions = $db->getAllQuestionsByUserIdAndAssessmentId(1, 1);
+    var_dump($questions);
+
+    ?>
+
 </body>
 
 </html>

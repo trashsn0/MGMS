@@ -13,6 +13,7 @@ $db = new DBManager();
 
 <head>
 
+
 </head>
 
 <body>
@@ -37,7 +38,7 @@ $db = new DBManager();
                     </button><strong>Success!</strong> User Has Been Updated
                 </div>
             <?php endif; ?>
-            <form action="../controller/editUserController.php" method="POST" id="myForm">
+            <form action="../controller/profileController.php" method="POST" id="myForm">
                 <div class="form-group row">
                     <label for="username" class="col-sm-2 col-form-label">Username: </label>
                     <div class="col-sm-10">
@@ -86,7 +87,7 @@ $db = new DBManager();
                     </button><strong>Success!</strong> Password Has Been Updated
                 </div>
             <?php endif; ?>
-            <form action="../controller/editUserController.php" method="POST">
+            <form action="../controller/profileController.php" method="POST">
                 <div class="form-group row">
                     <label for="oldPassword" class="col-sm-2 col-form-label">Old Password: </label>
                     <div class="col-sm-10">
@@ -122,34 +123,7 @@ $db = new DBManager();
     unset($_SESSION['Error']);
     unset($_SESSION['passwordError']);
     ?>
-
-    <script>
-        var edit = document.getElementById('edit');
-        var save = document.getElementById('save');
-        var cancel = document.getElementById('cancel');
-        var form = document.getElementById('myForm');
-
-        edit.addEventListener('click', function() {
-            for (var i = 0; i < form.length; i++) {
-                form.elements[i].disabled = false;
-            }
-            form.elements[0].focus();
-            edit.hidden = true;
-            save.hidden = false;
-            cancel.hidden = false;
-        });
-
-        cancel.addEventListener('click', function() {
-            for (var i = 0; i < form.length; i++) {
-                form.elements[i].disabled = true;
-            }
-            form.elements[0].focus();
-            edit.hidden = false;
-            edit.disabled = false;
-            save.hidden = true;
-            cancel.hidden = true;
-        });
-    </script>
+    <script src="../js/profileView.js" type="text/javascript"></script>
 
 </body>
 
