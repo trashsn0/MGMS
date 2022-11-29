@@ -73,7 +73,7 @@ session_start();
     $numberOfQuestions = $db->getNumberOfQuestions(1);
     $questions = $db->getAllQuestionsByUserIdAndAssessmentId(1, 1);
 
-    var_dump($numberOfQuestions[0]);
+    var_dump($numberOfQuestions);
 
     ?>
 
@@ -90,7 +90,14 @@ session_start();
 
             <tr>
                 <th><?php echo $i; ?></th>
-                <th>100</th>
+                <?php
+                if (array_search($i, array_column($questions, 'questionNumber')) !== false) {
+                    echo "<th>" . $questions[$i - 1]['grade'] . "</th>";
+                } else {
+                    echo "<th></th>";
+                }
+                ?>
+
             </tr>
 
         <?php

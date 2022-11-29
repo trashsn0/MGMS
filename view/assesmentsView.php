@@ -59,6 +59,7 @@ $db = new DBManager();
         // $assessments = $db->getAllQuestionsByUserId($_SESSION['loggedInUser']['id']);
         // var_dump($assessments);
         $assessments = $db->getAllAssessment();
+        var_dump($assessments);
         ?>
 
         <!-- Style this later -->
@@ -77,12 +78,39 @@ $db = new DBManager();
                                 <div class="accordion-body">
                                     <?php
 
-                                    $questions = $db->getAllQuestionsByUserIdAndAssessmentId($_SESSION['loggedInUser']['id'], $assessments[$i]['id']);
-                                    var_dump($questions);
-
-                                    // might need to rethink how this is done
+                                    $numberOfQuestions = $db->getNumberOfQuestions($i);
+                                    $questions = $db->getAllQuestionsByUserIdAndAssessmentId($i, $_SESSION['loggedInUser']['id']);
 
                                     ?>
+
+                                    <table class="table">
+                                        <tr>
+                                            <th scope="col">Question Number</th>
+                                            <th scope="col">Grade</th>
+                                        </tr>
+
+                                        <?php
+
+                                        for ($j = 1; $j <= $numberOfQuestions[0]; $j++) {
+                                        ?>
+
+                                            <tr>
+                                                <th><?php echo $j; ?></th>
+                                                <?php
+                                                if (array_search($j, array_column($questions, 'questionNumber')) !== false) {
+                                                    echo "<th scope='row'>" . $questions[$j - 1]['grade'] . "</th>";
+                                                } else {
+                                                    echo "<th scope='row'></th>";
+                                                }
+                                                ?>
+
+                                            </tr>
+
+                                        <?php
+                                        }
+                                        ?>
+
+                                    </table>
                                 </div>
                             </div>
                         </div>

@@ -60,9 +60,14 @@ function printTable()
         $str =  $_SESSION['selectedStudent'] . "," . $_SESSION['selectedAssignment'] . "," . $i;
 
         echo "<tr>
-                <th scope='row'>$i</th>
-                <th><input type='number' name='" . $str . "' min='0' max='100' value='100'></input></th>
-            </tr>";
+                <th scope='row'>" . $i . "</th>";
+
+        if (array_search($i, array_column($questions, 'questionNumber')) !== false) {
+            echo "<th><input type='number' name='" . $str . "' min='0' max='100' value='" . $questions[$i - 1]['grade'] . "'></input></th>";
+        } else {
+            echo "<th><input type='number' name='" . $str . "' min='0' max='100' value='0'></input></th>";
+        }
+        echo "</tr>";
     }
     echo "<tr>
             <th scope='row' colspan='2'><input type='button' value='Submit' class='btn btn-block btn-success' style='width: 40%;' name='submitGrades' id='submitGrades'>
