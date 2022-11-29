@@ -7,33 +7,69 @@ $db = new DBManager();
 session_start();
 
 if (isset($_POST['assignment'])) {
-    echo $_POST['assignment'];
+    $_SESSION['selectedAssignment'] = $_POST['assignment'];
+    if (isset($_SESSION['selectedAssignment'])) {
+        printTable();
+    } else {
+        echo "";
+    }
     die;
 }
 
 if (isset($_POST['userId'])) {
+    $_SESSION['selectedStudent'] = $_POST['userId'];
+    if (isset($_SESSION['selectedStudent'])) {
+        printTable();
+    } else {
+        echo "";
+    }
+    die;
+}
 
-    // $questions = $db->getAllQuestionsByUserIdAndAssessmentId($_SESSION['loggedInUser']['id'], $_POST['assignment']);
-    $numberOfQuestions = $db->getNumberOfQuestions($_POST['assignment']);
-    $questions = $db->getAllQuestionsByUserIdAndAssessmentId(1, 1);
-    echo implode(",", $questions[1]);
+if (isset($_POST['submitGrades'])) {
+    echo "<h1>here</h1>";
+    die;
+}
 
-    echo "<table>
+function printTable()
+{
+    if (!isset($_SESSION['selectedAssignment']) || ($_SESSION['selectedAssignment'] == 'default')) {
+        die;
+    }
+    if (!isset($_SESSION['selectedStudent']) || ($_SESSION['selectedStudent'] == 'default')) {
+        die;
+    }
+    $db = new DBManager();
+    $questions = $db->getAllQuestionsByUserIdAndAssessmentId($_SESSION['selectedStudent'], $_SESSION['selectedAssignment']);
+    $numberOfQuestions = $db->getNumberOfQuestions($_SESSION['selectedAssignment']);
+
+    echo "
+    <script src='http://code.jquery.com/jquery-latest.min.js' type='text/javascript'></script>
+    <script src='../js/inputGrades.js' type='text/javascript'></script>";
+
+    echo "<form action='' id='inputGradesForm'>
+    <table class='table table-striped'>
         <tr>
-        <th>Question Number</th>
-        <th>Grade</th>
+            <th scope='col'>Question Number</th>
+            <th scope='col'>Grade</th>
         </tr>";
 
-    for ($i = 0; $i < $numberOfQuestions; $i++) {
+    for ($i = 1; $i <= $numberOfQuestions[0]; $i++) {
 
-        echo "<tr>";
-        echo "<th>" . $i . "</th>";
-        echo "<th></th>";
-        echo "</tr>";
+        // studentId, assignmentId, questionNumber
+        $str =  $_SESSION['selectedStudent'] . "," . $_SESSION['selectedAssignment'] . "," . $i;
+
+        echo "<tr>
+                <th scope='row'>$i</th>
+                <th><input type='number' name='" . $str . "' min='0' max='100' value='100'></input></th>
+            </tr>";
     }
+    echo "<tr>
+            <th scope='row' colspan='2'><input type='button' value='Submit' class='btn btn-block btn-success' style='width: 40%;' name='submitGrades' id='submitGrades'>
+            </th>          
+        </tr>";
 
 
-    echo "</table>";
-    // echo $_POST['userId'];
-    // die;
+    echo "</table>
+    </form>";
 }

@@ -70,10 +70,34 @@ session_start();
 
     <?php
 
+    $numberOfQuestions = $db->getNumberOfQuestions(1);
     $questions = $db->getAllQuestionsByUserIdAndAssessmentId(1, 1);
-    var_dump($questions);
+
+    var_dump($numberOfQuestions[0]);
 
     ?>
+
+    <table>
+        <tr>
+            <th>Question Number</th>
+            <th>Grade</th>
+        </tr>
+
+        <?php
+
+        for ($i = 1; $i <= $numberOfQuestions[0]; $i++) {
+        ?>
+
+            <tr>
+                <th><?php echo $i; ?></th>
+                <th>100</th>
+            </tr>
+
+        <?php
+        }
+        ?>
+
+    </table>
 
 </body>
 
