@@ -40,35 +40,16 @@ $students = $db->getAllStudents();
             <hr>
             <br>
             <h4>Students</h4>
-            <form action="">
-                <input class=" btn btn-block btn-secondary" style="width: 20%;" type="button" name="previous" value="Previous" onclick="previous();">
-                <select onchange="fetchUserSelect(this.value);" class="form-select-lg mb-3" style="width: 20%;" name="students" id="students">
-                    <option value="default" selected></option>
-                    <?php
-
-                    for ($i = 0; $i < count($students); $i++) {
-                        echo '<option value="' . $students[$i]['id'] . '">' . $students[$i]['firstName'] . ' ' . $students[$i]['lastName'] . '</option>';
-                    }
-
-                    ?>
-                </select>
-                <input class="btn btn-block btn-secondary" style="width: 20%;" type="button" name="next" value="Next" onclick="next();">
-            </form>
-
-            <?php if (isset($_SESSION['Error'])) : ?>
-                <div class="alert alert-danger fade in alert-dismissible show">
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true" style="font-size:20px">×</span>
-                    </button><strong>Error! </strong> <?php echo $_SESSION['Error']; ?>
-                </div>
-            <?php endif; ?>
-            <?php if (isset($_GET['success'])) : ?>
-                <div class="alert alert-success fade in alert-dismissible show" style="margin-top:18px;">
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true" style="font-size:20px">×</span>
-                    </button><strong>Success!</strong> Grades Have Been Updated
-                </div>
-            <?php endif; ?>
+            <button class="btn btn-block btn-secondary" style="width: 20%;" name="previous" id="previous" type="button" onclick="previousUser();">Previous</button>
+            <select onchange="fetchUserSelect(this.value);" class="form-select-lg mb-3" style="width: 20%;" name="students" id="students">
+                <option value="default" selected></option>
+                <?php
+                for ($i = 0; $i < count($students); $i++) {
+                    echo '<option value="' . $students[$i]['id'] . '">' . $students[$i]['firstName'] . ' ' . $students[$i]['lastName'] . '</option>';
+                }
+                ?>
+            </select>
+            <button class="btn btn-block btn-secondary" style="width: 20%;" name="next" id="next" type="button" onclick="nextUser();">Next</button>
 
             <p id="notification"></p>
             <p id="printAjax"></p>
@@ -77,8 +58,6 @@ $students = $db->getAllStudents();
     </div>
 
     <?php
-    unset($_SESSION['Error']);
-    unset($_SESSION['success']);
     unset($_SESSION['selectedAssignment']);
     unset($_SESSION['selectedStudent']);
     ?>
