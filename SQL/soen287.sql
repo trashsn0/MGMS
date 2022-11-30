@@ -64,7 +64,7 @@ END$$
 DROP PROCEDURE IF EXISTS `GetAllAssessments`$$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `GetAllAssessments` ()  BEGIN
 	SELECT * FROM assessments
-    ORDER BY dueDate DESC;
+    ORDER BY dueDate ASC;
 END$$
 
 DROP PROCEDURE IF EXISTS `GetAllQuestionsByUserId`$$

@@ -54,7 +54,7 @@ $db = new DBManager();
                 <div class="form-group row">
                     <label for="numberOfQuestions" class="col-sm-2 col-form-label">Number Of Questions: </label>
                     <div class="col-sm-10">
-                        <input type="number" class="form-control-plaintext border border-dark" id="numberOfQuestions" name="numberOfQuestions">
+                        <input type="number" class="form-control-plaintext border border-dark" id="numberOfQuestions" name="numberOfQuestions" min="1">
                     </div>
                 </div>
 

@@ -27,7 +27,26 @@ if (isset($_POST['userId'])) {
 }
 
 if (isset($_POST['submitGrades'])) {
-    echo "<h1>here</h1>";
+    $numberOfQuestions = $db->getNumberOfQuestions($_SESSION['selectedAssignment']);
+
+    for ($i = 1; $i <= $numberOfQuestions[0]; $i++) {
+        $flag = $db->createOrUpdateGrade($_SESSION['selectedStudent'], $_SESSION['selectedAssignment'], $i, $_POST[$i]);
+    }
+
+
+    if ($flag) {
+        echo "<div class='alert alert-success fade in alert-dismissible show' style='margin-top:18px;'>
+                <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+                    <span aria-hidden='true' style='font-size:20px'>×</span>
+                </button><strong>Success!</strong> Grades Have Been Updated
+            </div>";
+    } else {
+        echo "<div class='alert alert-danger fade in alert-dismissible show'>
+                <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+                    <span aria-hidden='true' style='font-size:20px'>×</span>
+                </button><strong>Error! </strong> There was an error uploading the grades
+            </div>";
+    }
     die;
 }
 
@@ -40,7 +59,7 @@ function printTable()
         die;
     }
     $db = new DBManager();
-    $questions = $db->getAllQuestionsByUserIdAndAssessmentId($_SESSION['selectedStudent'], $_SESSION['selectedAssignment']);
+    $questions = $db->getAllQuestionsByAssessmentIdAndUserId($_SESSION['selectedStudent'], $_SESSION['selectedAssignment']);
     $numberOfQuestions = $db->getNumberOfQuestions($_SESSION['selectedAssignment']);
 
     echo "
@@ -57,15 +76,15 @@ function printTable()
     for ($i = 1; $i <= $numberOfQuestions[0]; $i++) {
 
         // studentId, assignmentId, questionNumber
-        $str =  $_SESSION['selectedStudent'] . "," . $_SESSION['selectedAssignment'] . "," . $i;
+        // $str =  $_SESSION['selectedStudent'] . "," . $_SESSION['selectedAssignment'] . "," . $i;
 
         echo "<tr>
                 <th scope='row'>" . $i . "</th>";
 
         if (array_search($i, array_column($questions, 'questionNumber')) !== false) {
-            echo "<th><input type='number' name='" . $str . "' min='0' max='100' value='" . $questions[$i - 1]['grade'] . "'></input></th>";
+            echo "<th><input type='number' name='" . $i . "' min='0' max='100' value='" . $questions[$i - 1]['grade'] . "'></input></th>";
         } else {
-            echo "<th><input type='number' name='" . $str . "' min='0' max='100' value='0'></input></th>";
+            echo "<th><input type='number' name='" . $i . "' min='0' max='100' value='0'></input></th>";
         }
         echo "</tr>";
     }

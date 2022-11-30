@@ -71,9 +71,7 @@ session_start();
     <?php
 
     $numberOfQuestions = $db->getNumberOfQuestions(1);
-    $questions = $db->getAllQuestionsByUserIdAndAssessmentId(1, 1);
-
-    var_dump($numberOfQuestions);
+    $questions = $db->getAllQuestionsByAssessmentIdAndUserId(2, 1);
 
     ?>
 
@@ -98,12 +96,12 @@ session_start();
                 }
                 ?>
 
+
             </tr>
 
         <?php
         }
         ?>
-
     </table>
 
 </body>

@@ -1,10 +1,18 @@
-var previous = document.getElementById('previous');
-var next = document.getElementById('next');
-var studentsSelect = document.getElementById('students');
+const previous = document.getElementById('previous');
+const next = document.getElementById('next');
 
 // previous = disabled when == 1
 // next = dsiabled when == select.length
 
+function previousUser() {
+    document.getElementById('students').selectedIndex--;
+    fetchUserSelect(document.getElementById('students').value);
+}
+
+function nextUser() {
+    document.getElementById('students').selectedIndex++;
+    fetchUserSelect(document.getElementById('students').value);
+}
 
 // Ajax function to get assignment ID to populate question table
 function fetchAssignmentSelect(val) {
@@ -17,6 +25,7 @@ function fetchAssignmentSelect(val) {
         },
         success: function (response) {
             $('#printAjax').html(response);
+            $('#notification').html('');
         },
         error: function () {
             alert("Form submission failed!");
@@ -35,6 +44,7 @@ function fetchUserSelect(val) {
         },
         success: function (response) {
             $('#printAjax').html(response);
+            $('#notification').html('');
         },
         error: function () {
             alert("Form submission failed!");

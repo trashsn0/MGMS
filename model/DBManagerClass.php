@@ -175,7 +175,7 @@ class DBManager
     }
 
     // Get all questions by user Id and assessment Id 
-    function getAllQuestionsByUserIdAndAssessmentId($assessmentId, $userId)
+    function getAllQuestionsByAssessmentIdAndUserId($assessmentId, $userId)
     {
         $stmt = $this->db->prepare("CALL GetAllQuestionsByUserIdAndAssessmentId(:assessmentId, :userId)");
         $stmt->bindParam(':assessmentId', $assessmentId);

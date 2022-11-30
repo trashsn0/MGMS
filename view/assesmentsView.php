@@ -56,10 +56,7 @@ $db = new DBManager();
     <?php if ($_SESSION['loggedInUser']['accessLevel'] == 0) : ?>
 
         <?php
-        // $assessments = $db->getAllQuestionsByUserId($_SESSION['loggedInUser']['id']);
-        // var_dump($assessments);
         $assessments = $db->getAllAssessment();
-        var_dump($assessments);
         ?>
 
         <!-- Style this later -->
@@ -71,16 +68,14 @@ $db = new DBManager();
                         <div class="accordion-item">
                             <h2 class="accordion-header" id="heading<?php echo $i; ?>">
                                 <button class="accordion-button <?php echo ($i > 0) ? 'collapsed' : ''; ?>" type="button" data-bs-toggle="collapse" data-bs-target="#collapse<?php echo $i; ?>" aria-expanded="<?php echo ($i == 0) ? 'true' : 'false'; ?>" aria-controls="collapse<?php echo $i; ?>">
-                                    <?php echo $assessments[$i]['name']; ?>
+                                    <?php echo $assessments[$i]['name'] . " - Due: " . $assessments[$i]['dueDate']; ?>
                                 </button>
                             </h2>
                             <div id="collapse<?php echo $i; ?>" class="accordion-collapse collapse <?php echo ($i == 0) ? 'show' : ''; ?>" aria-labelledby="heading<?php echo $i; ?>" data-bs-parent="#accordionExample">
                                 <div class="accordion-body">
                                     <?php
-
-                                    $numberOfQuestions = $db->getNumberOfQuestions($i);
-                                    $questions = $db->getAllQuestionsByUserIdAndAssessmentId($i, $_SESSION['loggedInUser']['id']);
-
+                                    $numberOfQuestions = $db->getNumberOfQuestions($i + 1);
+                                    $questions = $db->getAllQuestionsByAssessmentIdAndUserId($_SESSION['loggedInUser']['id'], $i + 1);
                                     ?>
 
                                     <table class="table">
@@ -90,54 +85,32 @@ $db = new DBManager();
                                         </tr>
 
                                         <?php
-
                                         for ($j = 1; $j <= $numberOfQuestions[0]; $j++) {
                                         ?>
-
                                             <tr>
                                                 <th><?php echo $j; ?></th>
                                                 <?php
                                                 if (array_search($j, array_column($questions, 'questionNumber')) !== false) {
                                                     echo "<th scope='row'>" . $questions[$j - 1]['grade'] . "</th>";
                                                 } else {
-                                                    echo "<th scope='row'></th>";
+                                                    echo "<th scope='row'>N/A</th>";
                                                 }
                                                 ?>
-
                                             </tr>
-
                                         <?php
                                         }
                                         ?>
-
                                     </table>
                                 </div>
                             </div>
                         </div>
                     <?php } ?>
                 </div>
-
-
             </div>
         </div>
 
     <?php endif; ?>
 
-
-
 </body>
 
 </html>
-
-<!-- <table>
-    <tr>
-        <th>Question Number</th>
-        <th>Grade</th>
-    </tr>
-    <?php for ($i = 0; $i < $value['numberOfQuestions']; $i++) { ?>
-        <tr>
-            <th><?php echo $i; ?></th>
-            <th><?php echo 'temp' ?></th>
-        </tr>
-    <?php } ?>
-</table> -->
