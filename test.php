@@ -67,42 +67,37 @@ session_start();
 
         </div>
     </div>
+    <hr>
 
     <?php
+    $assessments = $db->getAllAssessment();
 
-    $numberOfQuestions = $db->getNumberOfQuestions(1);
-    $questions = $db->getAllQuestionsByAssessmentIdAndUserId(2, 1);
-
+    $data = array();
+    for ($j = 1; $j <= $assessments[1]['numberOfQuestions']; $j++) {
+        $avg = $db->getQuestionAverage($assessments[1]['id'], $j);
+        array_push($data, array("y" => $avg[0], "label" => $j));
+    }
     ?>
+    <script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
 
-    <table>
-        <tr>
-            <th>Question Number</th>
-            <th>Grade</th>
-        </tr>
+    <!-- 1 -->
+    <div id="chartContainer" style="height: 300px; width: 100%;"></div>
 
-        <?php
-
-        for ($i = 1; $i <= $numberOfQuestions[0]; $i++) {
-        ?>
-
-            <tr>
-                <th><?php echo $i; ?></th>
-                <?php
-                if (array_search($i, array_column($questions, 'questionNumber')) !== false) {
-                    echo "<th>" . $questions[$i - 1]['grade'] . "</th>";
-                } else {
-                    echo "<th></th>";
-                }
-                ?>
-
-
-            </tr>
-
-        <?php
-        }
-        ?>
-    </table>
+    <!-- 2 -->
+    <script>
+        var chart = new CanvasJS.Chart("chartContainer", {
+            title: {
+                text: "Animation test"
+            },
+            animationEnabled: true,
+            data: [{
+                type: "column",
+                dataPoints: []
+            }]
+        });
+        chart.options.data[0].dataPoints = <?php echo json_encode($data, JSON_NUMERIC_CHECK); ?>;
+        chart.render();
+    </script>
 
 </body>
 
