@@ -110,6 +110,16 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `GetUserByUsername` (IN `usernameInp
 	SELECT * FROM `user` WHERE username = usernameInput;
 END$$
 
+DROP PROCEDURE IF EXISTS `GetQuestionAverage`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `GetQuestionAverage` (IN `assessmentIdInput` INT, IN `questionNumberInput` INT)  BEGIN
+	SELECT AVG(grade) FROM questions WHERE assessmentId = assessmentIdInput AND questionNumber = questionNumberInput;
+END$$
+
+DROP PROCEDURE IF EXISTS `GetAverageByAssessmentId`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `GetAverageByAssessmentId` (IN `assessmentIdInput` INT)  BEGIN
+	SELECT AVG(grade) FROM questions WHERE assessmentId = assessmentIdInput;
+END$$
+
 DROP PROCEDURE IF EXISTS `RegisterUser`$$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `RegisterUser` (IN `accessLevelInput` INT(255), IN `usernameInput` VARCHAR(255), IN `passwordInput` VARCHAR(255), IN `firstNameInput` VARCHAR(255), IN `lastNameInput` VARCHAR(255), OUT `isCreated` BOOLEAN)  BEGIN
 	IF NOT EXISTS(SELECT * FROM `user` WHERE username = usernameInput) THEN
