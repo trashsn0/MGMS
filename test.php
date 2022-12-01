@@ -71,10 +71,11 @@ session_start();
 
     <?php
     $assessments = $db->getAllAssessment();
+    var_dump($assessments);
 
     $data = array();
-    for ($j = 1; $j <= $assessments[1]['numberOfQuestions']; $j++) {
-        $avg = $db->getQuestionAverage($assessments[1]['id'], $j);
+    for ($j = 1; $j <= $assessments[9]['numberOfQuestions']; $j++) {
+        $avg = $db->getQuestionAverage($assessments[9]['id'], $j);
         array_push($data, array("y" => $avg[0], "label" => $j));
     }
     ?>

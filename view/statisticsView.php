@@ -23,7 +23,7 @@ foreach ($assessments as $i) {
 
 <head>
     <link href="../css/styles.css" rel="stylesheet" />
-    <script defer src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+    <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 
@@ -38,7 +38,9 @@ foreach ($assessments as $i) {
             },
             axisY: {
                 title: "Average Grade",
-                suffix: "%"
+                suffix: "%",
+                minimum: 0,
+                maximum: 100
             },
             data: [{
                 type: "column",
@@ -47,27 +49,6 @@ foreach ($assessments as $i) {
             }]
         });
         chart.render();
-
-        var chart2 = new CanvasJS.Chart("avgPerQuestion", {
-            animationEnabled: true,
-            theme: "light2",
-            title: {
-                text: "Average per Question"
-            },
-            axisY: {
-                title: "Average Grade",
-                suffix: "%"
-            },
-            axisX: {
-                interval: 1
-            },
-            data: [{
-                type: "column",
-                yValueFormatString: "###",
-                dataPoints: []
-            }]
-        });
-        // chart2.render();
     }
 </script>
 
@@ -88,7 +69,7 @@ foreach ($assessments as $i) {
                             <?php echo $assessments[$i]['name']; ?>
                         </button>
                     </h2>
-                    <div id="collapse<?php echo $i; ?>" class="accordion-collapse collapse <?php echo ($i == 0) ? 'show' : ''; ?>" aria-labelledby="heading<?php echo $i; ?>" data-bs-parent="#accordionExample">
+                    <div id="collapse<?php echo $i; ?>" class="accordion-collapse collapse <?php echo ($i == 0) ? 'show' : 'show'; ?>" aria-labelledby="heading<?php echo $i; ?>" data-bs-parent="#accordionExample">
                         <div class="accordion-body">
                             <?php
                             $data = array();
@@ -96,16 +77,41 @@ foreach ($assessments as $i) {
                                 $avg = $db->getQuestionAverage($assessments[$i]['id'], $j);
                                 array_push($data, array("y" => $avg[0], "label" => $j));
                             }
-                            var_dump(json_encode($data, JSON_NUMERIC_CHECK));
-
                             ?>
-                            <script type="text/javascript">
-                                alert(<?php echo $i; ?>);
-                                chart2.options.data[0].dataPoints = <?php echo json_encode($data, JSON_NUMERIC_CHECK); ?>;
-                                chart2.render();
-                            </script>
+                            <div id="<?php echo $assessments[$i]['name']; ?>" style="height: 370px; width: 100%;"></div>
 
-                            <div id="avgPerQuestion" style="height: 370px; width: 100%;"></div>
+                            <script type="text/javascript">
+                                var chart2 = new CanvasJS.Chart("<?php echo $assessments[$i]['name']; ?>", {
+                                    animationEnabled: true,
+                                    theme: "light2",
+                                    title: {
+                                        text: "Average per Question"
+                                    },
+                                    axisY: {
+                                        title: "Average Grade",
+                                        suffix: "%",
+                                        minimum: 0,
+                                        maximum: 100
+                                    },
+                                    axisX: {
+                                        interval: 1
+                                    },
+                                    data: [{
+                                        type: "column",
+                                        yValueFormatString: "###",
+                                        dataPoints: <?php echo json_encode($data, JSON_NUMERIC_CHECK); ?>
+                                    }]
+                                });
+                                chart2.render();
+                                <?php
+                                if ($i == 0) {
+                                } else {
+                                ?>
+                                    document.getElementById("collapse<?php echo $i; ?>").classList.remove("show");
+                                <?php
+                                }
+                                ?>
+                            </script>
                         </div>
                     </div>
                 </div>
