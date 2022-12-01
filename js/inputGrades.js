@@ -5,13 +5,35 @@ const next = document.getElementById('next');
 // next = dsiabled when == select.length
 
 function previousUser() {
+
+    if (document.getElementById('students').selectedIndex == 0) {
+        document.getElementById('students').selectedIndex = document.getElementById('students').length - 1;
+        fetchUserSelect(document.getElementById('students').value);
+        return;
+    }
+
     document.getElementById('students').selectedIndex--;
-    fetchUserSelect(document.getElementById('students').value);
+    console.log(document.getElementById('students').selectedIndex);
+    if (document.getElementById('students').value == '' || document.getElementById('students').value == 'default') {
+        // document.getElementById('students').selectedIndex--;
+        document.getElementById("printAjax").innerHTML = "";
+        document.getElementById("notification").innerHTML = "";
+        return;
+    } else {
+        fetchUserSelect(document.getElementById('students').value);
+    }
 }
 
 function nextUser() {
     document.getElementById('students').selectedIndex++;
-    fetchUserSelect(document.getElementById('students').value);
+    if (document.getElementById('students').value == '' || document.getElementById('students').value == 'default') {
+        document.getElementById('students').selectedIndex++;
+        document.getElementById("printAjax").innerHTML = "";
+        document.getElementById("notification").innerHTML = "";
+        return;
+    } else {
+        fetchUserSelect(document.getElementById('students').value);
+    }
 }
 
 // Ajax function to get assignment ID to populate question table

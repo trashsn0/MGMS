@@ -39,12 +39,12 @@ if (!isset($_SESSION['loggedInUser'])) {
                                 <a class="dropdown-item" href="inputGradesView.php">Input Grades</a>
                             </div>
                         </li>
-                        <li class="nav-item"><a class="nav-link" href="">Statistics</a></li>
+                        <li class="nav-item"><a class="nav-link" href="statisticsView.php">Statistics</a></li>
                     <?php endif; ?>
                     <!-- Show Student Options -->
                     <?php if ($_SESSION['loggedInUser']['accessLevel'] == 0) : ?>
                         <li class="nav-item"><a class="nav-link" href="assesmentsView.php">Assessment</a></li>
-                        <li class="nav-item"><a class="nav-link" href="">Statistics</a></li>
+                        <li class="nav-item"><a class="nav-link" href="statisticsView">Statistics</a></li>
                     <?php endif; ?>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

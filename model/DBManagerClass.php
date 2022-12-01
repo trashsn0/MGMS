@@ -229,4 +229,27 @@ class DBManager
             return false;
         }
     }
+
+    // Get assessment average
+    function getAverageByAssessmentId($assessmentId)
+    {
+        $stmt = $this->db->prepare("CALL GetAverageByAssessmentId(:assessmentId)");
+        $stmt->bindParam(':assessmentId', $assessmentId);
+        $stmt->execute();
+
+        $data = $stmt->fetchAll(PDO::FETCH_COLUMN);
+        return $data;
+    }
+
+    // Get Question average
+    function getQuestionAverage($assessmentId, $questionNumber)
+    {
+        $stmt = $this->db->prepare("CALL GetQuestionAverage(:assessmentId, :questionNumber)");
+        $stmt->bindParam(':assessmentId', $assessmentId);
+        $stmt->bindParam(':questionNumber', $questionNumber);
+        $stmt->execute();
+
+        $data = $stmt->fetchAll(PDO::FETCH_COLUMN);
+        return $data;
+    }
 }
