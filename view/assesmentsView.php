@@ -60,7 +60,7 @@ $db = new DBManager();
 
         <!-- Style this later -->
         <div class="vertical-center">
-            <div class="container" style="text-align: center;">
+            <div class="container" style="text-align: center; margin-bottom:2%;">
 
                 <div class="accordion" id="accordionExample">
                     <?php for ($i = 0; $i < count($assessments); $i++) { ?>
@@ -73,8 +73,8 @@ $db = new DBManager();
                             <div id="collapse<?php echo $i; ?>" class="accordion-collapse collapse <?php echo ($i == 0) ? 'show' : ''; ?>" aria-labelledby="heading<?php echo $i; ?>" data-bs-parent="#accordionExample">
                                 <div class="accordion-body">
                                     <?php
-                                    $numberOfQuestions = $db->getNumberOfQuestions($i + 1);
-                                    $questions = $db->getAllQuestionsByAssessmentIdAndUserId($_SESSION['loggedInUser']['id'], $i + 1);
+                                    $numberOfQuestions = $db->getNumberOfQuestions($assessments[$i]['id']);
+                                    $questions = $db->getAllQuestionsByAssessmentIdAndUserId($_SESSION['loggedInUser']['id'], $assessments[$i]['id']);
                                     ?>
 
                                     <table class="table">
@@ -84,6 +84,7 @@ $db = new DBManager();
                                         </tr>
 
                                         <?php
+                                        $sum = 0;
                                         for ($j = 1; $j <= $numberOfQuestions[0]; $j++) {
                                         ?>
                                             <tr>
@@ -91,6 +92,7 @@ $db = new DBManager();
                                                 <?php
                                                 if (array_search($j, array_column($questions, 'questionNumber')) !== false) {
                                                     echo "<th scope='row'>" . $questions[$j - 1]['grade'] . "</th>";
+                                                    $sum +=  $questions[$j - 1]['grade'];
                                                 } else {
                                                     echo "<th scope='row'>N/A</th>";
                                                 }
@@ -98,7 +100,12 @@ $db = new DBManager();
                                             </tr>
                                         <?php
                                         }
+                                        $avg = $sum / $numberOfQuestions[0];
                                         ?>
+                                        <tr>
+                                            <th scope="col">Average</th>
+                                            <th scope="col"><?php echo number_format((float)$avg, 2, '.', '') . "%"; ?></th>
+                                        </tr>
                                     </table>
                                 </div>
                             </div>
