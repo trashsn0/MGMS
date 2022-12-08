@@ -3,9 +3,13 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Nov 10, 2022 at 04:23 PM
+-- Generation Time: Nov 29, 2022 at 06:54 PM
 -- Server version: 5.7.36
 -- PHP Version: 7.4.26
+
+CREATE DATABASE IF NOT EXISTS `soen287` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
+USE `soen287`;
+
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -40,9 +44,45 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `CreateAssessment` (IN `nameInput` V
     END IF;
 END$$
 
+DROP PROCEDURE IF EXISTS `CreateOrUpdateGrade`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `CreateOrUpdateGrade` (IN `studentIdInput` INT, IN `assessmentIdInput` INT, IN `questionNumberInput` INT, IN `gradeInput` INT, OUT `isUpdated` BOOLEAN)  BEGIN
+
+	# Set to false by default
+	SET isUpdated = FALSE;
+    
+	IF EXISTS(SELECT * FROM `questions` WHERE assessmentId  = assessmentIdInput AND userId = studentIdInput AND questionNumber = questionNumberInput) THEN
+		UPDATE `questions`
+        SET grade = gradeInput
+        WHERE assessmentId  = assessmentIdInput AND userId = studentIdInput AND questionNumber = questionNumberInput;
+        SET isUpdated = TRUE;
+    ELSE
+		INSERT INTO `questions` VALUES(NULL, assessmentIdInput, studentIdInput, questionNumberInput, gradeInput);
+        SET isUpdated = TRUE;
+    END IF;
+END$$
+
 DROP PROCEDURE IF EXISTS `GetAllAssessments`$$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `GetAllAssessments` ()  BEGIN
-	SELECT * FROM assessments;
+	SELECT * FROM assessments
+    ORDER BY dueDate ASC;
+END$$
+
+DROP PROCEDURE IF EXISTS `GetAllQuestionsByUserId`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `GetAllQuestionsByUserId` (IN `userIdInput` INT)  BEGIN
+	SELECT * FROM questions WHERE userId = userIdInput
+    ORDER BY assessmentId , questionNumber;
+END$$
+
+DROP PROCEDURE IF EXISTS `GetAllQuestionsByUserIdAndAssessmentId`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `GetAllQuestionsByUserIdAndAssessmentId` (IN `userIdInput` INT, IN `assessmentIdInput` INT)  BEGIN
+	SELECT * FROM questions WHERE userID = userIdInput AND assessmentId = assessmentIdInput
+    ORDER BY questionNumber;
+END$$
+
+DROP PROCEDURE IF EXISTS `GetAllStudents`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `GetAllStudents` ()  BEGIN
+	SELECT id, firstName, lastName FROM user WHERE accessLevel = 0
+    ORDER BY id;
 END$$
 
 DROP PROCEDURE IF EXISTS `GetAllTeachers`$$
@@ -55,6 +95,11 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `GetAllUsers` ()  BEGIN
 	SELECT * FROM user;
 END$$
 
+DROP PROCEDURE IF EXISTS `GetNumberOfQuestions`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `GetNumberOfQuestions` (IN `assessmentIdInput` INT)  BEGIN
+	SELECT numberOfQuestions FROM assessments WHERE id = assessmentIdInput;
+END$$
+
 DROP PROCEDURE IF EXISTS `GetUserById`$$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `GetUserById` (IN `userId` INT(255))  BEGIN
 	SELECT * FROM `user` WHERE id = userId;
@@ -63,6 +108,16 @@ END$$
 DROP PROCEDURE IF EXISTS `GetUserByUsername`$$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `GetUserByUsername` (IN `usernameInput` VARCHAR(255))  BEGIN
 	SELECT * FROM `user` WHERE username = usernameInput;
+END$$
+
+DROP PROCEDURE IF EXISTS `GetQuestionAverage`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `GetQuestionAverage` (IN `assessmentIdInput` INT, IN `questionNumberInput` INT)  BEGIN
+	SELECT AVG(grade) FROM questions WHERE assessmentId = assessmentIdInput AND questionNumber = questionNumberInput;
+END$$
+
+DROP PROCEDURE IF EXISTS `GetAverageByAssessmentId`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `GetAverageByAssessmentId` (IN `assessmentIdInput` INT)  BEGIN
+	SELECT AVG(grade) FROM questions WHERE assessmentId = assessmentIdInput;
 END$$
 
 DROP PROCEDURE IF EXISTS `RegisterUser`$$
@@ -101,7 +156,25 @@ CREATE TABLE IF NOT EXISTS `assessments` (
   `numberOfQuestions` int(11) NOT NULL,
   `dueDate` date NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `questions`
+--
+
+DROP TABLE IF EXISTS `questions`;
+CREATE TABLE IF NOT EXISTS `questions` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `assessmentId` int(11) NOT NULL,
+  `userId` int(11) NOT NULL,
+  `questionNumber` int(11) NOT NULL,
+  `grade` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `assessmentId` (`assessmentId`),
+  KEY `userId` (`userId`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -119,8 +192,3 @@ CREATE TABLE IF NOT EXISTS `user` (
   `lastName` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
-COMMIT;
-
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

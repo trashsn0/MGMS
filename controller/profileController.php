@@ -40,7 +40,7 @@ if (isset($_POST['save'])) {
 
     if ($query == true) {
         $_SESSION['loggedInUser'] = $array;
-        header("Location: ../View/profileView.php?success");
+        header("Location: ../view/profileView.php?success");
     } elseif ($query == false) {
         $_SESSION['Error'] = 'Username not available!';
         header("Location: ../view/profileView.php");
@@ -70,6 +70,6 @@ if (isset($_POST['changePassword'])) {
     $query = $db->changePassword($_SESSION['loggedInUser']['id'], $_POST['newPassword']);
 
     if ($query) {
-        header("Location: ../View/profileView.php?passwordChanged");
+        header("Location: ../view/profileView.php?passwordChanged");
     }
 }

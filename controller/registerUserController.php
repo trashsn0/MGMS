@@ -9,32 +9,32 @@ session_start();
 if (isset($_POST['Register'])) {
 
     if (strlen($_POST['username']) < 2 || strlen($_POST['username']) > 20) {
-        $_SESSION['Error'] = 'Username must be between 2-20 characters';
-        header("Location: ../view/registerUserView.php");
+        $_SESSION['rError'] = 'Username must be between 2-20 characters';
+        header("Location: ../index.php");
         return;
     }
 
     if (strlen($_POST['password']) < 2 || strlen($_POST['password']) > 20) {
-        $_SESSION['Error'] = 'Password must be between 2-20 characters';
-        header("Location: ../view/registerUserView.php");
+        $_SESSION['rError'] = 'Password must be between 2-20 characters';
+        header("Location: ../index.php");
         return;
     }
 
     if ($_POST['password'] != $_POST['confirmPassword']) {
-        $_SESSION['Error'] = 'Passwords do not match';
-        header("Location: ../view/registerUserView.php");
+        $_SESSION['rError'] = 'Passwords do not match';
+        header("Location: ../index.php");
         return;
     }
 
     if (strlen($_POST['firstName']) < 2 || strlen($_POST['firstName']) > 20) {
-        $_SESSION['Error'] = 'First name must be between 2-20 characters';
-        header("Location: ../view/registerUserView.php");
+        $_SESSION['rError'] = 'First name must be between 2-20 characters';
+        header("Location: ../index.php");
         return;
     }
 
     if (strlen($_POST['lastName']) < 2 || strlen($_POST['lastName']) > 20) {
-        $_SESSION['Error'] = 'Last name must be between 2-20 characters';
-        header("Location: ../view/registerUserView.php");
+        $_SESSION['rError'] = 'Last name must be between 2-20 characters';
+        header("Location: ../index.php");
         return;
     }
 
@@ -50,14 +50,14 @@ if (isset($_POST['Register'])) {
     $query = $db->registerUser($user);
 
     if ($query == true) {
-        header("Location: ../View/registerUserView.php?success");
+        header("Location: ../index.php?rSuccess");
     } elseif ($query == false) {
-        $_SESSION['Error'] = 'Username not available!';
+        $_SESSION['rError'] = 'Username not available!';
         $_SESSION['username'] = $_POST['username'];
         $_SESSION['password'] = $_POST['password'];
         $_SESSION['confirmPassword'] = $_POST['confirmPassword'];
         $_SESSION['firstName'] = $_POST['firstName'];
         $_SESSION['lastName'] = $_POST['lastName'];
-        header("Location: ../view/registerUserView.php");
+        header("Location: ../index.php");
     }
 }

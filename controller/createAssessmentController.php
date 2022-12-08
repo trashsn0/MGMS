@@ -48,7 +48,7 @@ if (isset($_POST['createAssessment'])) {
     $assignmentExists = $db->createAssessment($assessment);
 
     if ($assignmentExists == true) {
-        header("Location: ../View/createAssessmentView.php?success");
+        header("Location: ../view/createAssessmentView.php?success");
     } elseif ($assignmentExists == false) {
         $_SESSION['Error'] = 'Assessment name already exists!';
         header("Location: ../view/createAssessmentView.php");

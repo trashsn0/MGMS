@@ -33,8 +33,36 @@
         <div class="container px-4 text-center">
             <h1 class="fw-bolder">Welcome to MGMS</h1>
             <p class="lead">A functional grade management system for Student/Professor in SOEN 287 Class</p>
-            <a class="btn btn-lg btn-light" href="#about">See what's up</a><br><br>
+            
+            <!-- Trigger the modal with a button -->
+<button type="button" class="btn btn-info btn-lg" data-bs-toggle="modal" data-target="#myModal">Open Modal</button>
+
+<!-- Modal -->
+<div id="myModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Modal Header</h4>
+      </div>
+      <div class="modal-body">
+        <p>Some text in the modal.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
         </div>
+
+
+
+
+
     </header>
     <!-- About section-->
     <br>

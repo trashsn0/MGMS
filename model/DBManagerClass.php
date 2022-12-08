@@ -127,6 +127,15 @@ class DBManager
         return $data;
     }
 
+    // Get all STUDENTS
+    function getAllStudents()
+    {
+        $query = $this->db->prepare("CALL GetAllStudents");
+        $query->execute();
+        $data = $query->fetchAll(PDO::FETCH_ASSOC);
+        return $data;
+    }
+
     // Get all assignments
     function getAllAssessment()
     {
@@ -163,5 +172,84 @@ class DBManager
         } else { // It shouldnt go here
             return false;
         }
+    }
+
+    // Get all questions by user Id and assessment Id 
+    function getAllQuestionsByAssessmentIdAndUserId($assessmentId, $userId)
+    {
+        $stmt = $this->db->prepare("CALL GetAllQuestionsByUserIdAndAssessmentId(:assessmentId, :userId)");
+        $stmt->bindParam(':assessmentId', $assessmentId);
+        $stmt->bindParam(':userId', $userId);
+        $stmt->execute();
+
+        $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $data;
+    }
+
+    // Get all questions by user Id
+    function getAllQuestionsByUserId($userId)
+    {
+        $stmt = $this->db->prepare("CALL GetAllQuestionsByUserId(:userId)");
+        $stmt->bindParam(':userId', $userId);
+        $stmt->execute();
+
+        $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $data;
+    }
+
+    // Get number of questions by assessment Id
+    function getNumberOfQuestions($assessmentId)
+    {
+        $stmt = $this->db->prepare("CALL GetNumberOfQuestions(:assessmentId)");
+        $stmt->bindParam(':assessmentId', $assessmentId);
+        $stmt->execute();
+
+        $data = $stmt->fetchAll(PDO::FETCH_COLUMN);
+        return $data;
+    }
+
+    // Create or update Grade
+    function createOrUpdateGrade($studentId, $assessmentId, $questionNumber, $grade)
+    {
+        $stmt = $this->db->prepare("CALL CreateOrUpdateGrade(:studentId, :assessmentId, :questionNumber, :grade, @output)");
+        $stmt->bindParam(':studentId', $studentId);
+        $stmt->bindParam(':assessmentId', $assessmentId);
+        $stmt->bindParam(':questionNumber', $questionNumber);
+        $stmt->bindParam(':grade', $grade);
+        $stmt->execute();
+
+        // fetch the output
+        $output = $this->db->query("select @output")->fetch(PDO::FETCH_COLUMN);
+
+        if ($output == 1) { // Grade uploaded successfully
+            return true;
+        } elseif ($output == 0) { // Error
+            return false;
+        } else { // It shouldnt go here
+            return false;
+        }
+    }
+
+    // Get assessment average
+    function getAverageByAssessmentId($assessmentId)
+    {
+        $stmt = $this->db->prepare("CALL GetAverageByAssessmentId(:assessmentId)");
+        $stmt->bindParam(':assessmentId', $assessmentId);
+        $stmt->execute();
+
+        $data = $stmt->fetchAll(PDO::FETCH_COLUMN);
+        return $data;
+    }
+
+    // Get Question average
+    function getQuestionAverage($assessmentId, $questionNumber)
+    {
+        $stmt = $this->db->prepare("CALL GetQuestionAverage(:assessmentId, :questionNumber)");
+        $stmt->bindParam(':assessmentId', $assessmentId);
+        $stmt->bindParam(':questionNumber', $questionNumber);
+        $stmt->execute();
+
+        $data = $stmt->fetchAll(PDO::FETCH_COLUMN);
+        return $data;
     }
 }
