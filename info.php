@@ -37,13 +37,8 @@
                     <div class="row gx-4 ">
                         <div class="col-lg-8">
                             <h2>About the site</h2>
-                            <p class="lead">This place is for orginizing ourselves and plan ahead to complete the website</p>
-                            <ul>
-                                <li>Regroup the team info</li>
-                                <li>Designing core feature and website layout</li>
-                                <li>Assigning task to team members</li>
-                                <li>Keep track of progress</li>
-                            </ul>
+                            <p class="lead">This site was created for our SOEN 287 final Project</p>
+                            
                         </div>
                     </div>
                 </div>
@@ -78,23 +73,28 @@
                                         <td><a href="https://github.com/trashsn0">@trashsn0</a></td>
                                     </tr>
                                     <tr>
-                                        <th scope="row">40123208</th>
-                                        <td>Peter</td>
-                                        <td>Rentopoulos</td>
-                                        <td><a href="https://github.com/beterbuilds">@beterbuilds</a></td>
-                                    </tr>
-                                    <tr>
                                         <th scope="row">40156779</th>
                                         <td>Bogdan</td>
                                         <td>Baloiu</td>
                                         <td><a href="https://github.com/Bogdan2709">@Bogdan2709</a></td>
                                     </tr>
                                     <tr>
-                                        <th scope="row">40156534</th>
-                                        <td>Chandler</td>
-                                        <td>Higgins</td>
+                                    <th scope="row">40156534</th>
+                                        <td><i>Chandler</i></td>
+                                        <td><i>Higgins</i></td>
                                         <td><a href="https://github.com/GoingBarDown">@GoingBarDown</a></td>
                                     </tr>
+
+
+                                    <tr>
+                                        <th scope="row"><s>40123208</s></th>
+                                        <td><s>Peter</s></td>
+                                        <td><s>Rentopoulos</s></td>
+                                        <td><a href="https://github.com/beterbuilds"><s>@beterbuilds</s></a></td>
+
+                                    </tr>
+                                    
+                                    
                                 </tbody>
                             </table>
                         </div>
@@ -102,64 +102,7 @@
                 </div>
             </section>
             <br><br>
-            <!-- plan section-->
-            <section id="plan">
-                <div class="container px-4">
-                    <div class="row gx-4 ">
-                        <div class="col-lg-8">
-                            <h2>Plan for the website</h2>
-                            <p><b>Website Architechture</b></p>
-                            <img src="assets/img/SitePlan.png" width="1300" height="600">
-
-
-                            <p><b>Overall progress</b></p>
-                            <div class="progress">
-                                <div class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: 68%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">68%</div>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-
-            <br><br><br>
-            <h1>Charts exemple you can use</h1>
-            <div class="card mb-4">
-                <div class="card-header">
-                    <i class="fas fa-chart-area me-1"></i>
-                    Area Chart Example
-                </div>
-                <div class="card-body"><canvas id="myAreaChart" width="100%" height="30"></canvas></div>
-                <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
-            </div>
-            <div class="row">
-                <div class="col-lg-6">
-                    <div class="card mb-4">
-                        <div class="card-header">
-                            <i class="fas fa-chart-bar me-1"></i>
-                            Bar Chart Example
-                        </div>
-                        <div class="card-body"><canvas id="myBarChart" width="100%" height="50"></canvas></div>
-                        <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
-                    </div>
-                </div>
-                <div class="col-lg-6">
-                    <div class="card mb-4">
-                        <div class="card-header">
-                            <i class="fas fa-chart-pie me-1"></i>
-                            Pie Chart Example
-                        </div>
-                        <div class="card-body"><canvas id="myPieChart" width="100%" height="50"></canvas></div>
-                        <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
-                    </div>
-                </div>
            
-                   
-                        
-
-                    
-                </div>
                 </main>
 
 

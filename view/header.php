@@ -162,7 +162,7 @@ session_start();
                                                 <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
                                                 Add Assesment
                                             </a>
-                                            <a class="nav-link" href="studentgrades.php">
+                                            <a class="nav-link" href="super/view/inputGradesView.php">
                                                 <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
                                                 Input Grades
                                             </a>
