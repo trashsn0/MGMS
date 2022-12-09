@@ -22,7 +22,7 @@ spl_autoload_register(function ($class) {
 
 
 
-    $db = new DBManager();
+$db = new DBManager();
 
 
 ?>
@@ -33,10 +33,7 @@ spl_autoload_register(function ($class) {
     <main>
         <div class="container-fluid px-4">
             <h1 class="mt-4">Student List</h1>
-            <ol class="breadcrumb mb-4">
-                <li class="breadcrumb-item"><a href="index.php">Index</a></li>
-                <li class="breadcrumb-item active">Student List</li>
-            </ol>
+
 
 
 
@@ -45,17 +42,17 @@ spl_autoload_register(function ($class) {
                 <div class="container" style="text-align: left;">
 
 
-                         
+
 
 
                     <?php
                     $students = $db->getAllStudents();
-                    $assessments = $db -> getAllAssessment();
-                    
+                    $assessments = $db->getAllAssessment();
+
                     ?>
 
                     <div class="hello" id="accordionExample">
-                        <?php for ($i = 0; $i < count($students); $i++) { 
+                        <?php for ($i = 0; $i < count($students); $i++) {
                             $dataPoints = array();
                             $weightAvg = array();
                             foreach ($assessments as $a) {
@@ -73,14 +70,14 @@ spl_autoload_register(function ($class) {
                                 $personalAvg = $sum / $numberOfQuestions[0];
                                 $weight = $a['weight'];
 
-                                array_push($weightAvg, $personalAvg*($weight/100));
+                                array_push($weightAvg, $personalAvg * ($weight / 100));
                                 array_push($dataPoints, array("y" => $personalAvg, "label" => $a['name']));
                             }
-                            
+
                             $weightAvg = array_filter($weightAvg);
                             $globalAvg = array_sum($weightAvg);
-                            
-                            ?>
+
+                        ?>
 
 
 
@@ -89,21 +86,21 @@ spl_autoload_register(function ($class) {
                                 <h2 class="accordion-header" id="heading<?php echo $i; ?>">
                                     <button class="accordion-button <?php echo ($i > 0) ? 'collapsed' : ''; ?>" type="button" data-bs-toggle="collapse" data-bs-target="#collapse<?php echo $i; ?>" aria-expanded="<?php echo ($i == 0) ? 'true' : 'false'; ?>" aria-controls="collapse<?php echo $i; ?>">
                                         <?php echo $students[$i]['firstName'] . " " . $students[$i]['lastName'] ?>
-                                        
+
                                     </button>
                                 </h2>
                                 <div id="collapse<?php echo $i; ?>" class="accordion-collapse collapse <?php echo ($i == 0) ? 'show' : ''; ?>" aria-labelledby="heading<?php echo $i; ?>" data-bs-parent="#accordionExample">
                                     <div class="accordion-body">
                                         <p>Overall Average: <?php echo "<strong>$globalAvg %</strong>"; ?>
-            
 
 
 
-                                        
 
-        
-                
-                                        
+
+
+
+
+
                                         </p>
 
                                     </div>
@@ -112,26 +109,26 @@ spl_autoload_register(function ($class) {
                         <?php } ?>
                     </div>
                     <script type="text/javascript">
-                                             window.onload = function() {
-                                                    // Average per Assessment
-                                                    var chart = new CanvasJS.Chart("avgPerAssessment", {
-                                                        animationEnabled: true,
-                                                        theme: "light2",
-                                                        
-                                                        axisY: {
-                                                            title: "Grade",
-                                                            suffix: "%",
-                                                            minimum: 0,
-                                                            maximum: 100
-                                                        },
-                                                        data: [{
-                                                            type: "column",
-                                                            yValueFormatString: "###",
-                                                            dataPoints: <?php echo json_encode($dataPoints, JSON_NUMERIC_CHECK); ?>
-                                                        }]
-                                                    });
-                                                    chart.render();
-                                                }
+                        window.onload = function() {
+                            // Average per Assessment
+                            var chart = new CanvasJS.Chart("avgPerAssessment", {
+                                animationEnabled: true,
+                                theme: "light2",
+
+                                axisY: {
+                                    title: "Grade",
+                                    suffix: "%",
+                                    minimum: 0,
+                                    maximum: 100
+                                },
+                                data: [{
+                                    type: "column",
+                                    yValueFormatString: "###",
+                                    dataPoints: <?php echo json_encode($dataPoints, JSON_NUMERIC_CHECK); ?>
+                                }]
+                            });
+                            chart.render();
+                        }
                     </script>
                 </div>
             </div>

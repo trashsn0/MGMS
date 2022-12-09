@@ -40,7 +40,7 @@ function nextUser() {
 function fetchAssignmentSelect(val) {
     $.ajax({
         type: 'post',
-        url: '../controller/inputGradesController.php',
+        url: 'controller/inputGradesController.php',
         datatype: 'json',
         data: {
             assignment: val
@@ -59,7 +59,7 @@ function fetchAssignmentSelect(val) {
 function fetchUserSelect(val) {
     $.ajax({
         type: 'post',
-        url: '../controller/inputGradesController.php',
+        url: 'controller/inputGradesController.php',
         datatype: 'json',
         data: {
             userId: val
@@ -84,7 +84,7 @@ $(() => {
         submitData += btn;
         $.ajax({
             type: "POST",
-            url: "../controller/inputGradesController.php",
+            url: "controller/inputGradesController.php",
             data: submitData,
             success: function (response) {
                 // alert("Form Submited Successfully");

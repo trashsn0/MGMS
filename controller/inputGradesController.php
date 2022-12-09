@@ -62,12 +62,14 @@ function printTable()
     $questions = $db->getAllQuestionsByAssessmentIdAndUserId($_SESSION['selectedStudent'], $_SESSION['selectedAssignment']);
     $numberOfQuestions = $db->getNumberOfQuestions($_SESSION['selectedAssignment']);
 
-    echo "
-    <script src='http://code.jquery.com/jquery-latest.min.js' type='text/javascript'></script>
-    <script src='../js/inputGrades.js' type='text/javascript'></script>";
+    $return = "";
 
-    echo "<form action='' id='inputGradesForm'>
-    <table class='table table-striped'>
+    $return .= "
+    <script src='http://code.jquery.com/jquery-latest.min.js' type='text/javascript'></script>
+    <script src='js/inputGrades.js' type='text/javascript'></script>";
+
+    $return .= "<form action='' id='inputGradesForm'>
+    <table class='table text-center table-striped'>
         <tr>
             <th scope='col'>Question Number</th>
             <th scope='col'>Grade</th>
@@ -78,22 +80,24 @@ function printTable()
         // studentId, assignmentId, questionNumber
         // $str =  $_SESSION['selectedStudent'] . "," . $_SESSION['selectedAssignment'] . "," . $i;
 
-        echo "<tr>
+        $return .= "<tr>
                 <th scope='row'>" . $i . "</th>";
 
         if (array_search($i, array_column($questions, 'questionNumber')) !== false) {
-            echo "<th><input type='number' name='" . $i . "' min='0' max='100' value='" . $questions[$i - 1]['grade'] . "'></input></th>";
+            $return .= "<th><input type='number' name='" . $i . "' min='0' max='100' value='" . $questions[$i - 1]['grade'] . "'></input></th>";
         } else {
-            echo "<th><input type='number' name='" . $i . "' min='0' max='100' value='0'></input></th>";
+            $return .= "<th><input type='number' name='" . $i . "' min='0' max='100' value='0'></input></th>";
         }
-        echo "</tr>";
+        $return .= "</tr>";
     }
-    echo "<tr>
-            <th scope='row' colspan='2'><input type='button' value='Submit' class='btn btn-block btn-success' style='width: 40%;' name='submitGrades' id='submitGrades'>
-            </th>          
+    $return .= "<tr>
+            <th scope='row' colspan='2' style='text-align: center;'><input type='button' value='Submit' class='btn btn-block btn-success' style='width: 40%;' name='submitGrades' id='submitGrades'>
+            </th>        
         </tr>";
 
 
-    echo "</table>
+    $return .= "</table>
     </form>";
+
+    echo $return;
 }

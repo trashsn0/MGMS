@@ -11,19 +11,19 @@ if (isset($_POST['save'])) {
 
     if (strlen($_POST['username']) < 2 || strlen($_POST['username']) > 20) {
         $_SESSION['Error'] = 'Username must be between 2-20 characters';
-        header("Location: ../view/profileView.php");
+        header("Location: ../profileView.php");
         return;
     }
 
     if (strlen($_POST['firstName']) < 2 || strlen($_POST['firstName']) > 20) {
         $_SESSION['Error'] = 'First name must be between 2-20 characters';
-        header("Location: ../view/profileView.php");
+        header("Location: ../profileView.php");
         return;
     }
 
     if (strlen($_POST['lastName']) < 2 || strlen($_POST['lastName']) > 20) {
         $_SESSION['Error'] = 'Last name must be between 2-20 characters';
-        header("Location: ../view/profileView.php");
+        header("Location: ../profileView.php");
         return;
     }
 
@@ -40,10 +40,10 @@ if (isset($_POST['save'])) {
 
     if ($query == true) {
         $_SESSION['loggedInUser'] = $array;
-        header("Location: ../view/profileView.php?success");
+        header("Location: ../profileView.php?success");
     } elseif ($query == false) {
         $_SESSION['Error'] = 'Username not available!';
-        header("Location: ../view/profileView.php");
+        header("Location: ../profileView.php");
     }
 }
 
@@ -51,25 +51,25 @@ if (isset($_POST['changePassword'])) {
 
     if (strlen($_POST['newPassword']) < 2 || strlen($_POST['newPassword']) > 20) {
         $_SESSION['passwordError'] = 'Password must be between 2-20 characters';
-        header("Location: ../view/profileView.php");
+        header("Location: ../profileView.php");
         return;
     }
 
     if ($_POST['newPassword'] != $_POST['newPasswordConfirmation']) {
         $_SESSION['passwordError'] = 'Passwords do not match';
-        header("Location: ../view/profileView.php");
+        header("Location: ../profileView.php");
         return;
     }
 
     if (!password_verify($_POST['oldPassword'], $_SESSION['loggedInUser']['password'])) {
         $_SESSION['passwordError'] = 'Incorrect Password';
-        header("Location: ../view/profileView.php");
+        header("Location: ../profileView.php");
         return;
     }
 
     $query = $db->changePassword($_SESSION['loggedInUser']['id'], $_POST['newPassword']);
 
     if ($query) {
-        header("Location: ../view/profileView.php?passwordChanged");
+        header("Location: ../profileView.php?passwordChanged");
     }
 }

@@ -15,7 +15,7 @@
 </head>
 
 
-<?php include 'view/header.php'; 
+<?php include 'view/header.php';
 
 
 spl_autoload_register(function ($class) {
@@ -23,44 +23,38 @@ spl_autoload_register(function ($class) {
 });
 if (isset($_SESSION['loggedInUser'])) {
 
-        $db = new DBManager();
-        $assessments = $db->getAllAssessment();
-        $totalStudents = count($db->getAllStudents());
-        $totalTeacher = count($db->getAllTeachers());
-        $dataPoints = array();
-        $dataPoints2 = array();
-        $weightAvg = array();
+    $db = new DBManager();
+    $assessments = $db->getAllAssessment();
+    $totalStudents = count($db->getAllStudents());
+    $totalTeacher = count($db->getAllTeachers());
+    $dataPoints = array();
+    $dataPoints2 = array();
+    $weightAvg = array();
 
-        foreach ($assessments as $i) {
-            $avg = $db->getAverageByAssessmentId($i['id']);
-            $numberOfQuestions = $db->getNumberOfQuestions($i['id']);
-            $questions = $db->getAllQuestionsByAssessmentIdAndUserId($_SESSION['loggedInUser']['id'], $i['id']);
-            $sum = 0;
-            for ($j = 1; $j <= $numberOfQuestions[0]; $j++) {
-                if (array_search($j, array_column($questions, 'questionNumber')) !== false) {
+    foreach ($assessments as $i) {
+        $avg = $db->getAverageByAssessmentId($i['id']);
+        $numberOfQuestions = $db->getNumberOfQuestions($i['id']);
+        $questions = $db->getAllQuestionsByAssessmentIdAndUserId($_SESSION['loggedInUser']['id'], $i['id']);
+        $sum = 0;
+        for ($j = 1; $j <= $numberOfQuestions[0]; $j++) {
+            if (array_search($j, array_column($questions, 'questionNumber')) !== false) {
 
-                    $sum +=  $questions[$j - 1]['grade'];
-                }
+                $sum +=  $questions[$j - 1]['grade'];
             }
-            $personalAvg = $sum / $numberOfQuestions[0];
-            $weight = $i['weight'];
-            
+        }
+        $personalAvg = $sum / $numberOfQuestions[0];
+        $weight = $i['weight'];
 
-                if ($_SESSION['loggedInUser']['accessLevel'] == 0) {
-                    array_push($weightAvg, $personalAvg*($weight/100));
-                    array_push($dataPoints, array("y" => $personalAvg, "label" => $i['name']));
-                    array_push($dataPoints2, array("y" => $weight, "label" => $i['name']));
-                }
-                elseif ($_SESSION['loggedInUser']['accessLevel'] == 1) {
-                    array_push($dataPoints, array("y" => $avg[0], "label" => $i['name']));
-                    array_push($dataPoints2, array("y" => $weight, "label" => $i['name']));
 
-            
-                }
-    
-            }
-    
-    
+        if ($_SESSION['loggedInUser']['accessLevel'] == 0) {
+            array_push($weightAvg, $personalAvg * ($weight / 100));
+            array_push($dataPoints, array("y" => $personalAvg, "label" => $i['name']));
+            array_push($dataPoints2, array("y" => $weight, "label" => $i['name']));
+        } elseif ($_SESSION['loggedInUser']['accessLevel'] == 1) {
+            array_push($dataPoints, array("y" => $avg[0], "label" => $i['name']));
+            array_push($dataPoints2, array("y" => $weight, "label" => $i['name']));
+        }
+    }
 }
 
 
@@ -71,7 +65,7 @@ if (isset($_SESSION['loggedInUser'])) {
 
     <main>
         <div class="container-fluid px-4">
-           
+
 
             </br>
             <header style="display:block; color: #fff;
@@ -84,14 +78,13 @@ if (isset($_SESSION['loggedInUser'])) {
                 <div class="container px-4 text-center">
                     <h1 class="fw-bolder">Welcome to MGMS</h1>
                     <p class="lead">A functional grade management system for Student/Professor in SOEN 287 Class</br></br>
-                                    
+
                         <?php if (!isset($_SESSION['loggedInUser'])) {
 
                             echo "Please login/register to view assessments and grades";
-                        }
-                        else {
+                        } else {
                             $fullname = $_SESSION['loggedInUser']['firstName'] . ' ' . $_SESSION['loggedInUser']['lastName'];
-                            echo "You are currently connected as <strong>$fullname</strong>"; 
+                            echo "You are currently connected as <strong>$fullname</strong>";
                             if ($_SESSION['loggedInUser']['accessLevel'] == 0) {
                                 $weightAvg = array_filter($weightAvg);
                                 $globalAvg = array_sum($weightAvg);
@@ -99,96 +92,102 @@ if (isset($_SESSION['loggedInUser'])) {
                             }
 
                             if ($_SESSION['loggedInUser']['accessLevel'] == 1) {
-                                echo "</br>Number of student enrolled : <strong>$totalStudents</strong>";
-                                echo "</br>Number of teacher : <strong>$totalTeacher</strong>";
-                                
+                                echo "</br>Number of students enrolled : <strong>$totalStudents</strong>";
+                                echo "</br>Number of teachers : <strong>$totalTeacher</strong>";
                             }
                         }
-                        
-                        
+
+
                         ?>
-                        </p>
+                    </p>
 
 
-<script type="text/javascript">
-    window.onload = function() {
-        // Average per Assessment
-        var chart = new CanvasJS.Chart("avgPerAssessment", {
-            animationEnabled: true,
-            theme: "light2",
-            
-            axisY: {
-                title: "Grade",
-                suffix: "%",
-                minimum: 0,
-                maximum: 100
-            },
-            data: [{
-                type: "column",
-                yValueFormatString: "###",
-                dataPoints: <?php echo json_encode($dataPoints, JSON_NUMERIC_CHECK); ?>
-            }]
-        });
-        chart.render();
+                    <script type="text/javascript">
+                        window.onload = function() {
+                            // Average per Assessment
+                            var chart = new CanvasJS.Chart("avgPerAssessment", {
+                                animationEnabled: true,
+                                theme: "light2",
 
-        // Average per Assessment
-        var chart2 = new CanvasJS.Chart("assessments", {
-            animationEnabled: true,
-            theme: "light2",
-            axisY: {
-                title: "Weight",
-                suffix: "%",
-                minimum: 0,
-                maximum: 100
-            },
-            data: [{
-                type: "pie",
-                yValueFormatString: "###",
-                dataPoints: <?php echo json_encode($dataPoints2, JSON_NUMERIC_CHECK); ?>
-            }]
+                                axisY: {
+                                    title: "Grade",
+                                    suffix: "%",
+                                    minimum: 0,
+                                    maximum: 100
+                                },
+                                data: [{
+                                    type: "column",
+                                    yValueFormatString: "###",
+                                    dataPoints: <?php echo json_encode($dataPoints, JSON_NUMERIC_CHECK); ?>
+                                }]
+                            });
+                            chart.render();
 
-        });
-        chart2.render();
-    }
-</script>
+                            // Average per Assessment
+                            var chart2 = new CanvasJS.Chart("assessments", {
+                                animationEnabled: true,
+                                theme: "light2",
+                                axisY: {
+                                    title: "Weight",
+                                    suffix: "%",
+                                    minimum: 0,
+                                    maximum: 100
+                                },
+                                data: [{
+                                    type: "pie",
+                                    yValueFormatString: "###",
+                                    dataPoints: <?php echo json_encode($dataPoints2, JSON_NUMERIC_CHECK); ?>
+                                }]
+
+                            });
+                            chart2.render();
+                        }
+                    </script>
 
 
 
-</div>
+                </div>
 
-</div>
-</br>
-<?php if (isset($_SESSION['loggedInUser'])) : ?>
+        </div>
+        </br>
+        <?php if (isset($_SESSION['loggedInUser'])) : ?>
             <div class="container px-4">
 
-            <div class="row">
-                <div class="col-lg-6">
-                    <div class="card mb-4">
-                        <div class="card-header">
-                            <i class="fas fa-chart-bar me-1"></i>
-                            Stats (<?php if ($_SESSION['loggedInUser']['accessLevel'] == 0) {echo "Your Grade in %";} else {echo "Class Avg in %";} ?> )
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <i class="fas fa-chart-bar me-1"></i>
+                                Stats (<?php if ($_SESSION['loggedInUser']['accessLevel'] == 0) {
+                                            echo "Your Grade in %";
+                                        } else {
+                                            echo "Class Avg in %";
+                                        } ?> )
+                            </div>
+                            <div class="card-body">
+                                <div id="avgPerAssessment" style="height: 200px; width: 100%;"></div>
+                            </div>
+                            <div class="card-footer small text-muted">Updated now</div>
                         </div>
-                        <div class="card-body"><div id="avgPerAssessment" style="height: 200px; width: 100%;"></div></div>
-                        <div class="card-footer small text-muted">Updated now</div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <i class="fas fa-chart-pie me-1"></i>
+                                Assessments (Weight in %)
+                            </div>
+                            <div class="card-body">
+                                <div id="assessments" style="height: 200px; width: 100%;"></div>
+                                <div class="card-footer small text-muted">Updated now</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="col-lg-6">
-                    <div class="card mb-4">
-                        <div class="card-header">
-                            <i class="fas fa-chart-pie me-1"></i>
-                            Assessments (Weight in %)
-                        </div>
-                        <div class="card-body"><div id="assessments" style="height: 200px; width: 100%;"></div>
-                        <div class="card-footer small text-muted">Updated now</div>
-                    </div>
-                </div>
-</div>
-</div>
-<?php endif;?>
-    
+            <?php endif; ?>
 
-</main>
 
-                <?php include 'view/footer.php' ?>
+    </main>
+
+    <?php include 'view/footer.php' ?>
 
 </html>
