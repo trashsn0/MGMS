@@ -1,0 +1,28 @@
+<?php
+spl_autoload_register(function ($class) {
+    include "../model/{$class}Class.php";
+});
+
+$db = new DBManager();
+session_start();
+
+ include_once 'db_config_filename.php';
+ // get id value
+ $id = $_GET['id'];
+
+// sql to delete a record
+$sql = "DELETE FROM assessments WHERE id='$id'";
+
+// print_r($sql);
+
+if (mysqli_query($conn, $sql)) {
+   echo "Record deleted successfully";
+} 
+else {
+    echo "Error deleting record: " . mysqli_error($conn);
+}
+
+ //redirect here
+include 'data.php';
+
+?>

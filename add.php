@@ -11,6 +11,7 @@
     <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
     <link href="css/styles.css" rel="stylesheet" />
     <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
+    <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
 </head>
 
 
@@ -21,6 +22,9 @@ spl_autoload_register(function ($class) {
 });
 
 $db = new DBManager();
+
+
+
 ?>
 
 
@@ -29,7 +33,7 @@ $db = new DBManager();
 
     <main>
         <div class="container-fluid px-4">
-            <h1 class="mt-4">View or Add Class Assesments</h1>
+            <h1 class="mt-4">SOEN 287 Assesments</h1>
             <ol class="breadcrumb mb-4">
                 <li class="breadcrumb-item"><a href="index.php">Index</a></li>
                 <li class="breadcrumb-item page">Add Assesment</li>
@@ -116,6 +120,7 @@ $db = new DBManager();
                     ?>
 
                     <?php for ($i = 0; $i < count($assessments); $i++) { ?>
+                        <?php $avg = $db->getAverageByAssessmentId($assessments[$i]['id']); ?>
                         <div class="vertical-center">
                             <button class="collapsible">
                                 <table>
@@ -130,9 +135,58 @@ $db = new DBManager();
 
                             <div class="content" style="text-align:center;">
 
+
+
                                 <p>Number of questions: <?php echo $assessments[$i]['numberOfQuestions']; ?></p>
                                 <p>Weight: <?php echo $assessments[$i]['weight']; ?></p>
                                 <p>Due Date: <?php echo $assessments[$i]['dueDate']; ?></p>
+                                <p>Class Average: <?php echo round ($avg[0], 0) . "%"; ?></br> </br> </p>
+
+                                <?php
+                                $data = array();
+                                for ($j = 1; $j <= $assessments[$i]['numberOfQuestions']; $j++) {
+                                    $avg = $db->getQuestionAverage($assessments[$i]['id'], $j);
+                                    array_push($data, array("y" => $avg[0], "label" => $j));
+                                }
+                                ?>
+                                <div id="<?php echo $assessments[$i]['name']; ?>" style="height: 370px; width: 100%;"></div>
+
+                                <script type="text/javascript">
+                                    var chart2 = new CanvasJS.Chart("<?php echo $assessments[$i]['name']; ?>", {
+                                        animationEnabled: true,
+                                        theme: "light2",
+                                        title: {
+                                            text: "Average per Question",
+                                            fontSize: 20,
+                                            fontWeight: "normal",
+
+                                        },
+                                        axisY: {
+                                            title: "Average Grade",
+                                            suffix: "%",
+                                            minimum: 0,
+                                            maximum: 100
+                                        },
+                                        axisX: {
+                                            interval: 1
+                                        },
+                                        data: [{
+                                            type: "column",
+                                            yValueFormatString: "###",
+                                            dataPoints: <?php echo json_encode($data, JSON_NUMERIC_CHECK); ?>
+                                        }]
+                                    });
+                                    chart2.render();
+                                    <?php
+                                    if ($i == 0) {
+                                    } else {
+                                    ?>
+                                        document.getElementById("collapse<?php echo $i; ?>").classList.remove("show");
+                                    <?php
+                                    }
+                                    ?>
+                                </script>
+
 
                             </div>
                         </div>
@@ -168,7 +222,7 @@ $db = new DBManager();
                 </div>
 
                 <?php if (isset($_SESSION['Error'])) : ?>
-                </br>
+                    </br>
                     <div class="alert alert-danger fade in alert-dismissible show">
                         <button type="button" class="close btn btn-danger" data-bs-dismiss="alert" aria-label="Close">
                             <span aria-hidden="true">x</span>
@@ -224,54 +278,54 @@ $db = new DBManager();
                     </div>
 
                     <div class="modal fade" id="addass" tabindex="-1" role="dialog" aria-labelledby="addassTitle" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="addassTitle">Remove Assessment</h5>
-                            </div>
-                            <div class="modal-body">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="addassTitle">Remove Assessment</h5>
+                                </div>
+                                <div class="modal-body">
 
 
 
 
-                                <form action="controller/createAssessmentController.php" method="post">
+                                    <form action="controller/createAssessmentController.php" method="post">
 
 
-                                    <div class="mb-3">
-                                        <label for="name" class="form-label">Name:</label>
-                                        <input type="text" class="form-control" id="name" name="name">
+                                        <div class="mb-3">
+                                            <label for="name" class="form-label">Name:</label>
+                                            <input type="text" class="form-control" id="name" name="name">
 
-                                    </div>
+                                        </div>
 
-                                    <div class="mb-3">
-                                        <label for="weight" class="form-label">Weight:</label>
-                                        <input type="number" class="form-control" id="weight" name="weight">
-                                    </div>
+                                        <div class="mb-3">
+                                            <label for="weight" class="form-label">Weight:</label>
+                                            <input type="number" class="form-control" id="weight" name="weight">
+                                        </div>
 
-                                    <div class="mb-3">
-                                        <label for="numberOfQuestions" class="form-label">Number of Questions: </label>
-                                        <input type="number" class="form-control" id="numberOfQuestions" name="numberOfQuestions" min="1">
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="dueDate" class="form-label">Due Date: </label>
-                                        <input type="date" class="form-control" id="dueDate" name="dueDate">
-                                    </div>
-
-
+                                        <div class="mb-3">
+                                            <label for="numberOfQuestions" class="form-label">Number of Questions: </label>
+                                            <input type="number" class="form-control" id="numberOfQuestions" name="numberOfQuestions" min="1">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="dueDate" class="form-label">Due Date: </label>
+                                            <input type="date" class="form-control" id="dueDate" name="dueDate">
+                                        </div>
 
 
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                <input class="btn btn-block btn-primary" style="width: 20%;" type="submit" name="createAssessment" value="Add">
-                                </form>
+
+
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    <input class="btn btn-block btn-primary" style="width: 20%;" type="submit" name="createAssessment" value="Add">
+                                    </form>
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    <?php
-                    unset($_SESSION['Error']);
-                    ?>
+                        <?php
+                        unset($_SESSION['Error']);
+                        ?>
 
             </body>
 
