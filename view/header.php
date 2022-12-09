@@ -9,7 +9,7 @@ session_start();
             <!-- Navbar Brand-->
             <div class="row">
                 <div class=".col-md-4"><center>
-                    <a class="navbar-brand ps-3 h1 text-center" href="controller/dashboardController.php">MGMS</a><br></center>
+                    <a class="navbar-brand ps-3 h1 text-center" href="index.php">MGMS</a><br></center>
                     <p class="text-light font-italic h6">Grade Management System</p>
                 </div>
                 
@@ -37,21 +37,6 @@ session_start();
             
             </div>
             <!-- Navbar-->
-           
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
             <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
@@ -169,7 +154,7 @@ session_start();
                         <?php  if (isset($_SESSION['loggedInUser'])): ?>
                             <?php if ($_SESSION['loggedInUser']['accessLevel'] == 1): ?>
                                                 <div class="sb-sidenav-menu-heading">Professor Pages</div>
-                                            <a class="nav-link" href="profdash.php">
+                                            <a class="nav-link" href="index.php">
                                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                                                 Prof Dashboard
                                             </a>
@@ -179,7 +164,7 @@ session_start();
                                             </a>
                                             <a class="nav-link" href="studentgrades.php">
                                                 <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
-                                                Student Grades and Statistics
+                                                Input Grades
                                             </a>
                                             <a class="nav-link" href="studentlist.php">
                                                 <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
@@ -188,7 +173,7 @@ session_start();
                             <?php endif; ?>
                             <?php if ($_SESSION['loggedInUser']['accessLevel'] == 0) : ?>
                                                 <div class="sb-sidenav-menu-heading">Student Pages</div>
-                                            <a class="nav-link" href="studentdash.php">
+                                            <a class="nav-link" href="index.php">
                                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                                                 Student Dashboard
                                             </a>
@@ -219,7 +204,7 @@ session_start();
                                 <nav class="sb-sidenav-menu-nested nav">
                                     <a class="nav-link" data-bs-toggle="modal" data-bs-target="#loginModal" >Login</a>
                                     <a class="nav-link" data-bs-toggle="modal" data-bs-target="#registerModal" >Register</a>
-                                    <a class="nav-link" href="#">Forgot Password</a>
+                                    
                                 </nav>
                             </div>
                             <a class="nav-link" href="about.php">

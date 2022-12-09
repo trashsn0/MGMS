@@ -18,13 +18,13 @@ if (isset($_POST['Login'])) {
         $_SESSION['loggedInUser'] = $query;
 
         if (!empty($query)) {
-            header("Location: dashboardController.php");
+            header("Location: ../index.php");
         } else {
             //Displays "Invalid Credentials Error On Login Page"
-            header("Location: dashboardController.php?logerror");
+            header("Location: ../index.php?logerror");
         }
     } else {
         //Displays "Invalid Credentials Error On Login Page"
-        header("Location: dashboardController.php?logerror");
+        header("Location: ../index.php?logerror");
     }
 }
