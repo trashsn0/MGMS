@@ -5,7 +5,7 @@
                             <div>
                                 <a href="https://github.com/trashsn0/MGMS/">GitHub</a>
                                 &middot;
-                                <a href="main/index.html">Presentation Page</a>
+                                <a href="info.php">About this Site</a>
                             </div>
                         </div>
                     </div>

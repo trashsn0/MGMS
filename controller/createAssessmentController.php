@@ -14,27 +14,23 @@ if (isset($_POST['createAssessment'])) {
 
     if (strlen($_POST['name']) < 2 || strlen($_POST['name']) > 20) {
         $_SESSION['Error'] = 'Name must be between 2-20 characters';
-        header("Location: ../view/createAssessmentView.php");
+        header("Location: ../add.php");
         return;
     }
 
     if (strlen($_POST['weight']) <= 0 || strlen($_POST['weight']) > 100) {
         $_SESSION['Error'] = 'Weight must be between 0-100';
-        header("Location: ../view/createAssessmentView.php");
+        header("Location: ../add.php");
         return;
     }
 
     if (strlen($_POST['numberOfQuestions']) <= 0) {
         $_SESSION['Error'] = 'Number of questions must be rgeater than 0';
-        header("Location: ../view/createAssessmentView.php");
+        header("Location: ../add.php");
         return;
     }
 
-    if ($_POST['dueDate'] < $currentDate) {
-        $_SESSION['Error'] = 'Date must be in the future';
-        header("Location: ../view/createAssessmentView.php");
-        return;
-    }
+    
 
 
     $array['id'] = 0;
@@ -48,9 +44,9 @@ if (isset($_POST['createAssessment'])) {
     $assignmentExists = $db->createAssessment($assessment);
 
     if ($assignmentExists == true) {
-        header("Location: ../view/createAssessmentView.php?success");
+        header("Location: ../add.php?success");
     } elseif ($assignmentExists == false) {
         $_SESSION['Error'] = 'Assessment name already exists!';
-        header("Location: ../view/createAssessmentView.php");
+        header("Location: ../add.php");
     }
 }
