@@ -120,10 +120,7 @@ h6, .h6, h5, .h5, h4, .h4, h3, .h3, h2, .h2, h1, .h1 {
   transition: all 0.25s ease-out;
 }
 
-.active,
-.collapsible:hover {
-  background-color: #555;
-}
+
 
 .collapsible:hover .arrow {
   -webkit-transform: rotate(45deg);

@@ -9,7 +9,7 @@ session_start();
             <!-- Navbar Brand-->
             <div class="row">
                 <div class=".col-md-4"><center>
-                    <a class="navbar-brand ps-3 h1 text-center" href="index.php">MGMS</a><br></center>
+                    <a class="navbar-brand ps-3 h1 text-center" href="controller/dashboardController.php">MGMS</a><br></center>
                     <p class="text-light font-italic h6">Grade Management System</p>
                 </div>
                 
