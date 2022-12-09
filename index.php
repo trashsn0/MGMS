@@ -21,38 +21,46 @@
 spl_autoload_register(function ($class) {
     include "model/{$class}Class.php";
 });
+if (isset($_SESSION['loggedInUser'])) {
 
-$db = new DBManager();
-$assessments = $db->getAllAssessment();
-$totalStudents = count($db->getAllStudents());
-$totalTeacher = count($db->getAllTeachers());
-$dataPoints = array();
-$dataPoints2 = array();
-$weightAvg = array();
+        $db = new DBManager();
+        $assessments = $db->getAllAssessment();
+        $totalStudents = count($db->getAllStudents());
+        $totalTeacher = count($db->getAllTeachers());
+        $dataPoints = array();
+        $dataPoints2 = array();
+        $weightAvg = array();
 
-foreach ($assessments as $i) {
-    $avg = $db->getAverageByAssessmentId($i['id']);
-    $numberOfQuestions = $db->getNumberOfQuestions($i['id']);
-    $questions = $db->getAllQuestionsByAssessmentIdAndUserId($_SESSION['loggedInUser']['id'], $i['id']);
-    $sum = 0;
-    for ($j = 1; $j <= $numberOfQuestions[0]; $j++) {
-        if (array_search($j, array_column($questions, 'questionNumber')) !== false) {
+        foreach ($assessments as $i) {
+            $avg = $db->getAverageByAssessmentId($i['id']);
+            $numberOfQuestions = $db->getNumberOfQuestions($i['id']);
+            $questions = $db->getAllQuestionsByAssessmentIdAndUserId($_SESSION['loggedInUser']['id'], $i['id']);
+            $sum = 0;
+            for ($j = 1; $j <= $numberOfQuestions[0]; $j++) {
+                if (array_search($j, array_column($questions, 'questionNumber')) !== false) {
 
-            $sum +=  $questions[$j - 1]['grade'];
-        }
-    }
-    $personalAvg = $sum / $numberOfQuestions[0];
-    $weight = $i['weight'];
-    echo $weight;
-    if ($_SESSION['loggedInUser']['accessLevel'] == 0) {
-        array_push($weightAvg, $personalAvg*($weight/100));
-        array_push($dataPoints, array("y" => $personalAvg, "label" => $i['name']));
-    }
-    else {
-        array_push($dataPoints, array("y" => $avg[0], "label" => $i['name']));
-    }
+                    $sum +=  $questions[$j - 1]['grade'];
+                }
+            }
+            $personalAvg = $sum / $numberOfQuestions[0];
+            $weight = $i['weight'];
+            
+
+                if ($_SESSION['loggedInUser']['accessLevel'] == 0) {
+                    array_push($weightAvg, $personalAvg*($weight/100));
+                    array_push($dataPoints, array("y" => $personalAvg, "label" => $i['name']));
+                    array_push($dataPoints2, array("y" => $weight, "label" => $i['name']));
+                }
+                elseif ($_SESSION['loggedInUser']['accessLevel'] == 1) {
+                    array_push($dataPoints, array("y" => $avg[0], "label" => $i['name']));
+                    array_push($dataPoints2, array("y" => $weight, "label" => $i['name']));
+
+            
+                }
     
-    array_push($dataPoints2, array("y" => $weight, "label" => $i['name']));
+            }
+    
+    
 }
 
 
