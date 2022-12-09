@@ -51,6 +51,7 @@ if (isset($_POST['Register'])) {
 
     if ($query == true) {
         header("Location: ../index.php?rSuccess");
+        
     } elseif ($query == false) {
         $_SESSION['rError'] = 'Username not available!';
         $_SESSION['username'] = $_POST['username'];

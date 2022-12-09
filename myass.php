@@ -14,7 +14,17 @@
 </head>
 
 
-<?php include 'view/header.php'; ?>
+<?php
+include 'view/header.php';
+spl_autoload_register(function ($class) {
+    include "model/{$class}Class.php";
+});
+
+$db = new DBManager();
+?>
+
+
+
 
 <div id="layoutSidenav_content">
 
@@ -23,7 +33,7 @@
         <div class="container-fluid px-4">
             <h1 class="mt-4">My Assesments</h1>
             <ol class="breadcrumb mb-4">
-                <li class="breadcrumb-item"><a href="index.php">Index</a></li>
+                <li class="breadcrumb-item"><a href="studentdash.php">Dashboard</a></li>
                 <li class="breadcrumb-item page">My Assesments</li>
             </ol>
 
@@ -98,80 +108,126 @@
                         transition: transform .2s ease-in-out;
                     }
                 </style>
+
+                
+
             </head>
 
             <body>
 
-                
-                <button class="collapsible">
-                    <table>
-
-                        <tr style="width: 2500px;">
-                            <th style="width: 3000px; text-align:left; padding-left: 25px;">Assessment 1</th>
-                            <th style="width: 1200px; text-align: center;">Weight 10%</th>
-                            <th style="width: 1200px; text-align: center;">Grade 15/20</th>
-                            <th class="arrow"></th>
-                        </tr>
-                    </table>
-                </button>
-                <div class="content">
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                        dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex
-                        ea commodo consequat.</p>
-                </div>
-
-                <button class="collapsible">
-                    <table>
-                        <tr>
-                            <th style="width: 3000px; text-align:left; padding-left: 25px;">Assessment 2</th>
-                            <th style="width: 1200px; text-align: center;">Weight 10%</th>
-                            <th style="width: 1200px; text-align: center;">Grade 25/30</th>
-                            <th class="arrow"></th>
-                        </tr>
-                    </table>
-                </button>
-                <div class="content">
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                        dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex
-                        ea commodo consequat.</p>
-                </div>
-                <button class="collapsible">
-                    <table>
-                        <tr>
-                            <th style="width: 3000px;">Midterm</th>
-                            <th style="width: 1200px; text-align: center;">Weight 30%</th>
-                            <th style="width: 1200px; text-align: center;">Grade 28/40</th>
-                            <th class="arrow"></th>
-                        </tr>
-                    </table>
-                </button>
-                <div class="content">
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                        dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex
-                        ea commodo consequat.</p>
-                </div>
 
 
-                <script>
-                    var coll = document.getElementsByClassName("collapsible", );
-                    var i;
 
-                    for (i = 0; i < coll.length; i++) {
-                        coll[i].addEventListener("click", function() {
-                            this.classList.toggle("active");
-                            var content = this.nextElementSibling;
-                            if (content.style.maxHeight) {
-                                content.style.maxHeight = null;
-                            } else {
-                                content.style.maxHeight = content.scrollHeight + "px";
-                            }
-                        });
-                    }
-                </script>
 
-                <script>
 
-                </script>
+                <?php if ($_SESSION['loggedInUser']['accessLevel'] == 0) : ?>
+
+                    <?php
+                    $assessments = $db->getAllAssessment();
+                    ?>
+
+                    <?php for ($i = 0; $i < count($assessments); $i++) { ?>
+                        <div class="vertical-center">
+                            <button class="collapsible">
+                                <table>
+                                    <?php
+                                    $numberOfQuestions = $db->getNumberOfQuestions($assessments[$i]['id']);
+                                    $questions = $db->getAllQuestionsByAssessmentIdAndUserId($_SESSION['loggedInUser']['id'], $assessments[$i]['id']);
+                                    ?>
+                                    <?php
+                                    $sum = 0;
+                                    for ($j = 1; $j <= $numberOfQuestions[0]; $j++) {
+                                    ?>
+                                        
+                                            <?php
+                                            if (array_search($j, array_column($questions, 'questionNumber')) !== false) {
+
+                                                $sum +=  $questions[$j - 1]['grade'];
+                                            } else {;
+                                            }
+                                            ?>
+                                        
+                                    <?php
+                                    }
+                                    $avg = $sum / $numberOfQuestions[0];
+                                    ?>
+
+                                    <tr style="width: 2500px;">
+                                        <th style="width: 2000px; text-align:left; padding-left: 25px;"><?php echo $assessments[$i]['name'] ?></th>
+                                        <th style="width: 1200px; text-align:left; padding-left: 25px;"><?php echo "Due: " . $assessments[$i]['dueDate']; ?></th>
+                                        <th style="width: 1200px; text-align: center;"><?php echo "Weight: " . $assessments[$i]['weight'] . "%"; ?></th>
+                                        <th style="width: 1200px; text-align: center;"><?php echo number_format((float)$avg, 2, '.', '') . "%"; ?></th>
+
+                                        <th class="arrow"></th>
+                                    </tr>
+                                </table>
+                            </button>
+
+
+
+
+
+                            <div class="content">
+                                <?php
+                                $numberOfQuestions = $db->getNumberOfQuestions($assessments[$i]['id']);
+                                $questions = $db->getAllQuestionsByAssessmentIdAndUserId($_SESSION['loggedInUser']['id'], $assessments[$i]['id']);
+                                ?>
+                                <table class="table">
+                                    <tr>
+                                        <th scope="col">Question Number</th>
+                                        <th scope="col">Grade</th>
+                                    </tr>
+
+                                    <?php
+                                    $sum = 0;
+                                    for ($j = 1; $j <= $numberOfQuestions[0]; $j++) {
+                                    ?>
+                                        <tr>
+                                            <th><?php echo $j; ?></th>
+                                            <?php
+                                            if (array_search($j, array_column($questions, 'questionNumber')) !== false) {
+                                                echo "<th scope='row'>" . $questions[$j - 1]['grade'] . "</th>";
+                                                $sum +=  $questions[$j - 1]['grade'];
+                                            } else {
+                                                echo "<th scope='row'>N/A</th>";
+                                            }
+                                            ?>
+                                        </tr>
+                                    <?php
+                                    }
+                                    $avg = $sum / $numberOfQuestions[0];
+                                    ?>
+                                    <tr>
+                                        <th scope="col">Total</th>
+                                        <th scope="col"><?php echo number_format((float)$avg, 2, '.', '') . "%"; ?></th>
+                                    </tr>
+                                </table>
+                            </div>
+
+                    <?php }
+                endif; ?>
+
+
+
+
+                    <script>
+                        var coll = document.getElementsByClassName("collapsible", );
+                        var i;
+
+                        for (i = 0; i < coll.length; i++) {
+                            coll[i].addEventListener("click", function() {
+                                this.classList.toggle("active");
+                                var content = this.nextElementSibling;
+                                if (content.style.maxHeight) {
+                                    content.style.maxHeight = null;
+                                } else {
+                                    content.style.maxHeight = content.scrollHeight + "px";
+                                }
+                            });
+                        }
+                    </script>
+                    </hr>
+
 
 
             </body>

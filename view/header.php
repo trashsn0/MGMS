@@ -61,7 +61,7 @@ session_start();
 
                         <?php if(!isset($_SESSION['loggedInUser'])) : ?>
                         <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#loginModal">Login</a></li>
-                        <li><a a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#registerModal">Register</a></li>
+                        <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#registerModal">Register</a></li>
                         
                         
                         <?php endif; ?>
@@ -217,8 +217,8 @@ session_start();
                             </a>
                             <div class="collapse" id="pagesCollapseAuth" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
                                 <nav class="sb-sidenav-menu-nested nav">
-                                    <a class="nav-link" href="view/loginView.php">Login</a>
-                                    <a class="nav-link" href="view/registerUserView.php">Register</a>
+                                    <a class="nav-link" data-bs-toggle="modal" data-bs-target="#loginModal" >Login</a>
+                                    <a class="nav-link" data-bs-toggle="modal" data-bs-target="#registerModal" >Register</a>
                                     <a class="nav-link" href="#">Forgot Password</a>
                                 </nav>
                             </div>
@@ -239,6 +239,8 @@ session_start();
                             <span aria-hidden="true">x</span>
                                 </button><strong>&ensp;Error! </strong> <?php echo $_SESSION['rError']; ?>
                             </div>
+                            <?php session_destroy();
+        unset($_SESSION['Error']); ?>
                     <?php endif; ?>
 
                     <?php if (isset($_GET['rSuccess'])) : ?>

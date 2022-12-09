@@ -108,6 +108,67 @@ h6, .h6, h5, .h5, h4, .h4, h3, .h3, h2, .h2, h1, .h1 {
   line-height: 1.2;
 }
 
+.collapsible {
+  display: block;
+  text-transform: uppercase;
+  text-align: center;
+  padding: 1rem;
+  color: #fff;
+  background: #343a40;
+  cursor: pointer;
+  border-radius: 7px;
+  transition: all 0.25s ease-out;
+}
+
+.active,
+.collapsible:hover {
+  background-color: #555;
+}
+
+.collapsible:hover .arrow {
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+
+}
+
+.collapsible:active .arrow.left {
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+
+}
+
+.content {
+  padding: 0 18px;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.2s ease-out;
+  background-color: #f1f1f1;
+}
+
+.arrow {
+  border: solid black;
+  border-width: 0 3px 3px 0;
+  display: inline-block;
+  padding: 6px;
+  transform: rotate(135deg);
+  -webkit-transform: rotate(135deg);
+  transition: transform .2s ease-in-out;
+}
+
+
+
+.down {
+  border: solid black;
+  border-width: 0 3px 3px 0;
+  display: inline-block;
+  padding: 6px;
+  transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+  transition: transform .2s ease-in-out;
+}
+
 h1, .h1 {
   font-size: calc(1.375rem + 1.5vw);
 }
